@@ -11,60 +11,55 @@
   *{box-sizing:border-box}
   html,body{margin:0}
   body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.45;min-height:100vh;-webkit-text-size-adjust:100%}
-  .masthead{background:var(--navy);color:#fff;text-align:center;border-bottom:4px solid var(--gold);padding:calc(24px + env(safe-area-inset-top,0px)) 20px 88px}
+  .hide{display:none!important}
+  .masthead{background:var(--navy);color:#fff;text-align:center;border-bottom:4px solid var(--gold);padding:calc(24px + env(safe-area-inset-top,0px)) 20px 84px}
   .crest{width:50px;height:50px;display:block;margin:0 auto 10px}
   .masthead h1{font-family:var(--serif);font-weight:600;font-size:1.6rem;margin:0 0 4px}
   .masthead p{margin:0;font-size:.92rem;color:#c9d4e8}
-  .sheet{max-width:440px;margin:-60px auto 0;padding:0 16px calc(30px + env(safe-area-inset-bottom,0px))}
-  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 28px rgba(13,34,64,.14);overflow:hidden}
+  .sheet{max-width:440px;margin:-56px auto 0;padding:0 16px calc(30px + env(safe-area-inset-bottom,0px))}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 28px rgba(13,34,64,.14);overflow:hidden;margin-bottom:14px}
   .card-head{padding:18px 22px 14px;border-bottom:1px solid var(--line)}
   .card-head h2{font-family:var(--serif);font-size:1.2rem;margin:0 0 2px;color:var(--navy)}
-  .card-head p{margin:0;font-size:.86rem;color:var(--muted)}
+  .card-head p{margin:0;font-size:.88rem;color:var(--muted)}
   .card-body{padding:20px 22px 24px}
-  .tabs{display:flex;border-bottom:1px solid var(--line)}
-  .tab{flex:1;font:inherit;font-weight:600;font-size:.96rem;padding:15px 8px;border:0;background:#f5f7fb;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent}
-  .tab.on{background:#fff;color:var(--navy);border-bottom-color:var(--gold)}
+  .center{text-align:center}
+  .seg{display:flex;border-bottom:1px solid var(--line)}
+  .seg button{flex:1;font:inherit;font-weight:600;font-size:.95rem;padding:15px 8px;border:0;background:#f5f7fb;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent}
+  .seg button.on{background:#fff;color:var(--navy);border-bottom-color:var(--gold)}
   .field{margin-bottom:16px}
   label{display:block;font-size:.86rem;font-weight:600;color:var(--navy);margin-bottom:7px}
-  input{width:100%;font:inherit;font-size:1rem;padding:14px;border:1.5px solid var(--line);border-radius:10px;background:#f8f9fc;color:var(--ink)}
+  input,select{width:100%;font:inherit;font-size:1rem;padding:14px;border:1.5px solid var(--line);border-radius:10px;background:#f8f9fc;color:var(--ink)}
   input::placeholder{color:#98a2b5}
-  input:focus{outline:none;background:#fff;border-color:var(--navy-2);box-shadow:0 0 0 4px rgba(26,58,107,.14)}
-  input.invalid{border-color:var(--err);background:#fff7f6}
-  .msg{font-size:.86rem;margin:0 0 14px;min-height:0}
-  .msg.bad{color:var(--err)}
-  .msg.good{color:var(--ok);font-weight:600}
-  .btn{width:100%;font:inherit;font-size:1.02rem;font-weight:600;padding:15px;border:0;border-radius:10px;cursor:pointer;color:#fff;
-    background:linear-gradient(180deg,var(--navy-2),var(--navy));box-shadow:0 2px 0 var(--gold),0 8px 16px rgba(13,34,64,.22)}
-  .btn:disabled{opacity:.6}
-  .btn:active{transform:translateY(1px)}
-  .link{display:block;margin:16px auto 0;font:inherit;font-size:.92rem;font-weight:600;color:var(--navy-2);background:none;border:0;cursor:pointer;text-decoration:underline;padding:6px}
-  .ghost{width:100%;margin-top:14px;font:inherit;font-weight:600;padding:13px;border-radius:10px;border:1.5px solid var(--navy-2);background:transparent;color:var(--navy);cursor:pointer}
-  .btn:focus-visible,.ghost:focus-visible,.link:focus-visible,.tab:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-  .notice{background:#fff7e0;border:1px solid #ecd48a;color:#6b5210;border-radius:10px;padding:12px 14px;font-size:.86rem;margin-bottom:14px}
-  .view,.pane{display:none}
-  .view.show,.pane.show{display:block}
-  .status{padding:30px 22px 26px;text-align:center}
-  .badge{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:2rem;color:#fff}
-  .badge.wait{background:var(--gold);animation:pulse 1.6s ease-in-out infinite}
-  .badge.ok{background:var(--ok)}
-  .badge.no{background:var(--err)}
-  @keyframes pulse{50%{transform:scale(1.08);opacity:.8}}
-  .status h2{font-family:var(--serif);font-size:1.4rem;color:var(--navy);margin:0 0 6px}
-  .status p{margin:0;color:var(--muted);font-size:.94rem}
-  .rows{margin:20px 0 0;text-align:left;border-top:1px solid var(--line)}
-  .rows div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:.92rem}
-  .rows dt{color:var(--muted)}
-  .rows dd{margin:0;font-weight:600;text-align:right;word-break:break-word}
-  .hint{font-size:.8rem;color:var(--muted);margin:6px 0 0}
-  @media (prefers-reduced-motion:reduce){.badge.wait{animation:none}}
+  input:focus,select:focus{outline:none;background:#fff;border-color:var(--navy-2);box-shadow:0 0 0 4px rgba(26,58,107,.14)}
+  input.invalid,select.invalid{border-color:var(--err);background:#fff7f6}
+  input[readonly]{background:#eef1f6;color:#0d2240}
+  .hint{margin:6px 0 0;font-size:.82rem;color:var(--muted)}
   .pw{position:relative}
   .pw input{padding-right:70px}
   .pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);font:inherit;font-size:.84rem;font-weight:600;color:var(--navy-2);background:none;border:0;padding:8px 10px;border-radius:8px;cursor:pointer}
-  .pw-toggle:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
-  input[readonly]{background:#eef1f6;color:#0d2240}
-  select{width:100%;font:inherit;font-size:1rem;padding:14px;border:1.5px solid var(--line);border-radius:10px;background:#f8f9fc;color:var(--ink)}
-  select:focus{outline:none;background:#fff;border-color:var(--navy-2);box-shadow:0 0 0 4px rgba(26,58,107,.14)}
-  select.invalid{border-color:var(--err);background:#fff7f6}
+  .btn{width:100%;font:inherit;font-size:1.02rem;font-weight:600;padding:15px;border:0;border-radius:10px;cursor:pointer;color:#fff;
+    background:linear-gradient(180deg,var(--navy-2),var(--navy));box-shadow:0 2px 0 var(--gold),0 8px 16px rgba(13,34,64,.22)}
+  .btn:disabled{opacity:.5;box-shadow:none}
+  .btn:active{transform:translateY(1px)}
+  .link{display:block;margin:14px auto 0;font:inherit;font-size:.92rem;font-weight:600;color:var(--navy-2);background:none;border:0;cursor:pointer;text-decoration:underline;padding:6px}
+  .btn:focus-visible,.link:focus-visible,.seg button:focus-visible,.pw-toggle:focus-visible,.outbtn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .notice{background:#fff7e0;border:1px solid #ecd48a;color:#6b5210;border-radius:10px;padding:12px 14px;font-size:.88rem;margin-bottom:16px}
+  .notice.ok{background:#e6f5ec;border-color:#a9d9bd;color:#165c38}
+  .msg{font-size:.86rem;margin:0 0 12px}
+  .msg.bad{color:var(--err)}
+  .msg.good{color:var(--ok);font-weight:600}
+  .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+  .bar span{font-weight:600;color:var(--navy);word-break:break-word}
+  .outbtn{font:inherit;font-size:.86rem;font-weight:600;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer;white-space:nowrap}
+  .rows{margin:0 0 18px;border-top:1px solid var(--line)}
+  .rows div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+  .rows dt{color:var(--muted)}
+  .rows dd{margin:0;font-weight:600;text-align:right;word-break:break-word}
+  .badge{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:2rem;color:#fff}
+  .badge.wait{background:var(--gold)}
+  .badge.ok{background:var(--ok)}
+  .center h2{font-family:var(--serif);font-size:1.4rem;color:var(--navy);margin:0 0 8px}
+  .center p{margin:0 0 18px;color:var(--muted);font-size:.94rem}
 </style>
 </head>
 <body>
@@ -80,19 +75,17 @@
 
 <main class="sheet">
 
-  <!-- Sign in / Create account / Forgot password -->
-  <section class="card view show" id="authView">
-    <div class="tabs" id="tabs">
-      <button class="tab on" id="tabIn" type="button">Sign in</button>
-      <button class="tab" id="tabUp" type="button">Create account</button>
+  <!-- Sign in / create account / forgot password -->
+  <section class="card" id="authView">
+    <div class="seg" role="tablist">
+      <button type="button" class="on" id="tabIn" role="tab">Sign in</button>
+      <button type="button" id="tabUp" role="tab">Create account</button>
     </div>
     <div class="card-body">
-      <div class="notice" id="setupNotice" style="display:none">
-        Not connected yet. Open the file and set <b>DB_URL</b> and <b>API_KEY</b> near the top of the script.
-      </div>
+      <div class="notice hide" id="setupNotice">Not connected yet. Open the file and set <b>DB_URL</b> and <b>API_KEY</b> near the top of the script.</div>
+      <div class="notice ok hide" id="gateNote">Gate QR scanned. Sign in to register your exit or entry.</div>
 
-      <!-- Sign in -->
-      <div class="pane show" id="paneIn">
+      <div id="paneIn">
         <div class="field"><label for="siEmail">Email</label>
           <input id="siEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
         <div class="field"><label for="siPass">Password</label>
@@ -102,8 +95,7 @@
         <button class="link" id="toForgot" type="button">Forgot password?</button>
       </div>
 
-      <!-- Create account -->
-      <div class="pane" id="paneUp">
+      <div id="paneUp" class="hide">
         <div class="field"><label for="suId">Roll number</label>
           <input id="suId" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 26737101">
           <p class="hint" id="suLookup">Your name and department appear after you enter it.</p></div>
@@ -113,6 +105,9 @@
           <input id="suDept" type="text" readonly placeholder="Filled in automatically"></div>
         <div class="field"><label for="suRoom">Room number</label>
           <input id="suRoom" type="text" autocomplete="off" autocapitalize="characters" placeholder="e.g. B-214"></div>
+        <div class="field"><label for="suPhone">Mobile number</label>
+          <input id="suPhone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="10-digit mobile number">
+          <p class="hint">The warden may call this number if you are late.</p></div>
         <div class="field"><label for="suEmail">Email</label>
           <input id="suEmail" type="email" autocomplete="email" placeholder="you@example.com">
           <p class="hint">Used to reset your password if you forget it.</p></div>
@@ -120,11 +115,11 @@
           <input id="suPass" type="password" autocomplete="new-password" placeholder="At least 6 characters"></div>
         <p class="msg" id="suMsg"></p>
         <button class="btn" id="suBtn" type="button">Create account</button>
+        <p class="hint center" style="margin-top:12px">The warden checks every new account once.</p>
       </div>
 
-      <!-- Forgot password -->
-      <div class="pane" id="paneFp">
-        <p style="margin:0 0 16px;color:var(--muted);font-size:.92rem">Enter your account email. We will send a link to set a new password.</p>
+      <div id="paneFp" class="hide">
+        <p class="hint" style="margin:0 0 14px">Enter your account email. We will send a link to set a new password.</p>
         <div class="field"><label for="fpEmail">Email</label>
           <input id="fpEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
         <p class="msg" id="fpMsg"></p>
@@ -134,75 +129,90 @@
     </div>
   </section>
 
-  <!-- Home: request exit or entry -->
-  <section class="card view" id="homeView">
-    <div class="card-head">
-      <h2 id="hello">Welcome</h2>
-      <p>Fill in the details. The warden will approve your request.</p>
-    </div>
-    <div class="card-body">
-      <dl class="rows" style="margin:0 0 20px;border-top:0">
-        <div><dt>Student ID</dt><dd id="hId"></dd></div>
-        <div><dt>Room</dt><dd id="hRoom"></dd></div>
-        <div><dt>Department</dt><dd id="hDept"></dd></div>
-      </dl>
-      <div class="field"><label for="hTime" id="hTimeLabel">Exit time</label>
-        <input id="hTime" type="datetime-local"></div>
-      <div class="field" id="purposeField"><label for="hPurpose">Purpose</label>
-        <select id="hPurpose">
-          <option value="">Choose a purpose</option>
-          <option value="Class">Class</option>
-          <option value="Playground">Playground</option>
-          <option value="Market">Market</option>
-          <option value="Home">Home</option>
-        </select></div>
-      <p class="msg" id="hMsg"></p>
-      <button class="btn" id="sendBtn" type="button">Request to go out</button>
-      <button class="ghost" id="outBtn" type="button">Sign out</button>
-    </div>
-  </section>
+  <!-- After sign in -->
+  <section id="homeView" class="hide">
+    <div class="bar"><span id="who"></span><button class="outbtn" id="outBtn" type="button">Sign out</button></div>
+    <p class="msg" id="homeMsg"></p>
 
-  <!-- Result / waiting -->
-  <section class="card view" id="statusView" aria-live="polite">
-    <div class="status">
-      <div class="badge wait" id="badge">&#8987;</div>
-      <h2 id="stTitle"></h2>
-      <p id="stText"></p>
-      <dl class="rows">
-        <div><dt>Name</dt><dd id="rName"></dd></div>
-        <div><dt>Student ID</dt><dd id="rId"></dd></div>
-        <div><dt>Room</dt><dd id="rRoom"></dd></div>
-        <div><dt>Department</dt><dd id="rDept"></dd></div>
-        <div><dt id="rTimeLbl">Time</dt><dd id="rTime"></dd></div>
-        <div id="rPurRow" style="display:none"><dt>Purpose</dt><dd id="rPur"></dd></div>
-        <div><dt>Requested at</dt><dd id="rReq"></dd></div>
-        <div id="rAppRow" style="display:none"><dt>Approved at</dt><dd id="rApp"></dd></div>
-      </dl>
-      <button class="ghost" id="backBtn" type="button" style="display:none">Done</button>
+    <div class="card hide" id="waitCard"><div class="card-body center">
+      <div class="badge wait">&#8987;</div>
+      <h2>Waiting for warden approval</h2>
+      <p>The warden checks every new account once, to confirm you are a hostel student. You can register your exit and entry after that.</p>
+      <button class="btn" id="recheckBtn" type="button">Check again</button>
+    </div></div>
+
+    <div class="card hide" id="regCard">
+      <div class="card-head"><h2 id="regTitle"></h2><p id="stateLine"></p></div>
+      <div class="card-body">
+        <dl class="rows">
+          <div><dt>Name</dt><dd id="rName"></dd></div>
+          <div><dt>Roll number</dt><dd id="rId"></dd></div>
+          <div><dt>Room</dt><dd id="rRoom"></dd></div>
+          <div><dt>Department</dt><dd id="rDept"></dd></div>
+          <div><dt>Mobile</dt><dd id="rPhone"></dd></div>
+        </dl>
+        <div class="notice hide" id="gateWarn">Scan the QR code at the hostel gate to register your exit or entry. It cannot be done from anywhere else.</div>
+        <div class="field" id="purposeField">
+          <label for="purpose">Where are you going?</label>
+          <select id="purpose">
+            <option value="">Choose a purpose</option>
+            <option>Class</option>
+            <option>Playground</option>
+            <option>Market</option>
+            <option>Home</option>
+          </select>
+        </div>
+        <p class="hint" style="margin:0 0 14px">Your time is saved automatically when you submit.</p>
+        <p class="msg" id="regMsg"></p>
+        <button class="btn" id="regBtn" type="button"></button>
+      </div>
     </div>
+
+    <div class="card hide" id="doneCard"><div class="card-body center">
+      <div class="badge ok">&#10003;</div>
+      <h2 id="doneTitle"></h2>
+      <p id="doneText"></p>
+      <button class="btn" id="doneBtn" type="button">Done</button>
+    </div></div>
   </section>
 
 </main>
 
 <script>
 (function () {
-  // ---- Settings (set both) ----
-  // Firebase Realtime Database URL, e.g. https://gandhi-hostel-default-rtdb.firebaseio.com
+  // ---- Settings ----
   var DB_URL = "https://gandhi-hostel-default-rtdb.asia-southeast1.firebasedatabase.app";
-  // Firebase Web API key (Project settings > General > Web API Key)
   var API_KEY = "AIzaSyDiNFVaxdes7KXSzmEmiN51GGejtsK8qVI";
-  var STORAGE_KEY = "gandhiHostelSession";
-  var POLL_MS = 4000;
+  var STORAGE_KEY = "gandhiStudentSession";
+  var GATE_KEY = "gandhiGate";
+  var GATE_MINUTES = 15;
 
   var $ = function (id) { return document.getElementById(id); };
-  var configured = DB_URL.indexOf("YOUR-PROJECT") === -1 && API_KEY.indexOf("YOUR-WEB") === -1;
   var base = DB_URL.replace(/\/$/, "");
-  var timer = null;
-  var session = null; // {uid, idToken, refreshToken, exp, profile}
+  var configured = DB_URL.indexOf("YOUR-PROJECT") === -1 && API_KEY.indexOf("YOUR-WEB") === -1;
+  var session = null, profile = null, lastEntry = null, inside = true;
+  var lookupSeq = 0, lookupTimer = null;
 
-  if (!configured) $("setupNotice").style.display = "block";
+  if (!configured) $("setupNotice").classList.remove("hide");
 
-  // ---- Firebase Auth (REST) ----
+  // ---- Gate QR: the link in the QR carries a secret code ----
+  try {
+    var g = new URLSearchParams(location.search).get("g");
+    if (g) {
+      sessionStorage.setItem(GATE_KEY, JSON.stringify({ g: g, ts: Date.now() }));
+      history.replaceState(null, "", location.pathname); // keep the code out of the address bar
+    }
+  } catch (e) {}
+  function gateToken() {
+    try {
+      var v = JSON.parse(sessionStorage.getItem(GATE_KEY) || "null");
+      if (v && v.g && Date.now() - v.ts < GATE_MINUTES * 60000) return v.g;
+    } catch (e) {}
+    return null;
+  }
+  if (gateToken()) $("gateNote").classList.remove("hide");
+
+  // ---- Firebase Auth + Database (REST) ----
   function authCall(endpoint, body) {
     return fetch("https://identitytoolkit.googleapis.com/v1/accounts:" + endpoint + "?key=" + encodeURIComponent(API_KEY), {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body)
@@ -213,10 +223,15 @@
       });
     });
   }
+  function setSession(uid, idToken, rt, expiresIn) {
+    session = session || {};
+    session.uid = uid; session.idToken = idToken; session.refreshToken = rt;
+    session.exp = Date.now() + (parseInt(expiresIn, 10) || 3600) * 1000;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ rt: rt })); } catch (e) {}
+  }
   function refreshSession(rt) {
     return fetch("https://securetoken.googleapis.com/v1/token?key=" + encodeURIComponent(API_KEY), {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: "grant_type=refresh_token&refresh_token=" + encodeURIComponent(rt)
     }).then(function (r) {
       return r.json().then(function (j) {
@@ -225,23 +240,14 @@
       });
     });
   }
-  function setSession(uid, idToken, rt, expiresIn) {
-    session = session || {};
-    session.uid = uid; session.idToken = idToken; session.refreshToken = rt;
-    session.exp = Date.now() + (parseInt(expiresIn, 10) || 3600) * 1000;
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ rt: rt })); } catch (e) {}
-  }
   function token() {
     if (session.exp - Date.now() > 60000) return Promise.resolve(session.idToken);
     return refreshSession(session.refreshToken).then(function () { return session.idToken; });
   }
-
-  // ---- Database (Firebase REST, sends the student's sign-in token) ----
-  function db(method, path, body) {
+  function db(method, path, body, query) {
     return token().then(function (t) {
-      return fetch(base + path + ".json?auth=" + encodeURIComponent(t), {
-        method: method,
-        headers: { "Content-Type": "application/json" },
+      return fetch(base + path + ".json?auth=" + encodeURIComponent(t) + (query ? "&" + query : ""), {
+        method: method, headers: { "Content-Type": "application/json" },
         body: body === undefined ? undefined : JSON.stringify(body)
       });
     }).then(function (r) {
@@ -249,33 +255,41 @@
       return r.json();
     });
   }
+  function rosterGet(key) {
+    return fetch(base + "/roster/" + encodeURIComponent(key) + ".json").then(function (r) {
+      if (!r.ok) { var err = new Error("DB_ERROR"); err.status = r.status; throw err; }
+      return r.json();
+    });
+  }
   function toKey(id) { return id.toUpperCase().replace(/[.#$\[\]\/\s]/g, "-"); }
 
-  // ---- Messages ----
+  // ---- Helpers ----
   var ERRORS = {
-    EMAIL_EXISTS: "An account with this email already exists. Sign in instead.",
     INVALID_EMAIL: "Enter a valid email address.",
+    EMAIL_EXISTS: "An account with this email already exists. Sign in instead.",
     WEAK_PASSWORD: "Password must be at least 6 characters.",
     INVALID_LOGIN_CREDENTIALS: "Email or password is incorrect.",
     INVALID_PASSWORD: "Email or password is incorrect.",
     EMAIL_NOT_FOUND: "Email or password is incorrect.",
-    USER_DISABLED: "This account has been disabled. Contact the warden.",
+    USER_DISABLED: "This account has been disabled.",
     TOO_MANY_ATTEMPTS_TRY_LATER: "Too many attempts. Wait a few minutes and try again.",
-    ROLL_NOT_FOUND: "This roll number is not in the hostel list. Check it or contact the warden.",
-    STATE_CHANGED: "Your status changed. Check the form and send again.",
-    ID_TAKEN: "This Student ID is already registered. Contact the warden.",
+    ROLL_NOT_FOUND: "This roll number is not in the student list. Check it or contact the warden.",
+    EMAIL_IN_USE: "This email already has an account, but with a different password. Use Sign in, or Forgot password.",
+    ID_TAKEN: "This roll number already has an account. Sign in instead, or contact the warden.",
+    PROFILE_MISSING: "Your profile could not be found. Contact the warden.",
     SESSION_EXPIRED: "Your session expired. Sign in again.",
-    DB_ERROR: "Could not save to the database. Check the database rules."
+    DB_ERROR: "Could not reach the database. Check your internet connection and try again."
   };
-  function say(id, text, good) {
-    var m = $(id);
-    m.textContent = text || "";
-    m.className = "msg" + (text ? (good ? " good" : " bad") : "");
-  }
   function explain(e) {
     var code = String(e && e.message || "").split(" ")[0];
     return ERRORS[code] || "Could not connect. Check your internet connection and try again.";
   }
+  function say(id, text, kind) {
+    var m = $(id);
+    m.textContent = text || "";
+    m.className = "msg" + (text && kind ? " " + kind : "");
+  }
+  function busy(btn, on, label) { btn.disabled = on; btn.textContent = on ? "Please wait..." : label; }
   function need(ids) {
     var ok = true;
     ids.forEach(function (id) {
@@ -285,133 +299,37 @@
     });
     return ok;
   }
-  function busy(btn, on, label) { btn.disabled = on; btn.textContent = on ? "Please wait..." : label; }
-
-  // ---- Views ----
-  function showView(v) {
-    ["auth", "home", "status"].forEach(function (n) { $(n + "View").classList.toggle("show", n === v); });
-    window.scrollTo(0, 0);
-  }
-  function showPane(p) {
-    ["In", "Up", "Fp"].forEach(function (n) { $("pane" + n).classList.toggle("show", n === p); });
-    $("tabs").style.display = p === "Fp" ? "none" : "flex";
-    $("tabIn").classList.toggle("on", p === "In");
-    $("tabUp").classList.toggle("on", p === "Up");
-    ["siMsg", "suMsg", "fpMsg"].forEach(function (m) { say(m, ""); });
-  }
-  function fmt(iso) {
-    if (!iso) return "";
-    return new Date(iso).toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  function fmt(ms) {
+    return new Date(ms).toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   }
 
-  // ---- Request form: exit time + purpose when going out, entry time when coming back ----
-  var nextType = "out";
-  function localNow() {
-    var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-    return d.toISOString().slice(0, 16);
-  }
-  function sendLabel() { return nextType === "out" ? "Request to go out" : "Request to come in"; }
-  function updateForm() {
-    var going = nextType === "out";
-    $("hTimeLabel").textContent = going ? "Exit time" : "Entry time";
-    $("purposeField").style.display = going ? "" : "none";
-    if (!$("sendBtn").disabled) $("sendBtn").textContent = sendLabel();
-  }
-  $("hPurpose").addEventListener("change", function () { $("hPurpose").classList.remove("invalid"); });
-
-  function openHome() {
-    var p = session.profile;
-    $("hello").textContent = "Hello, " + p.name;
-    $("hId").textContent = p.id;
-    $("hRoom").textContent = p.room;
-    $("hDept").textContent = p.dept || "-";
-    say("hMsg", "");
-    nextType = "out"; $("hTime").value = localNow(); $("hPurpose").value = ""; updateForm();
-    // Resume a request that is still waiting
-    db("GET", "/students/" + encodeURIComponent(p.key)).then(function (node) {
-      var pend = node && node.pending;
-      nextType = node && node.state === "out" ? "in" : "out"; updateForm();
-      if (pend && pend.status === "pending") { renderStatus(pend); startPolling(); }
-    }).catch(function () {});
-    showView("home");
-  }
-
-  function renderStatus(p) {
-    var going = p.type === "out";
-    var pr = session.profile;
-    $("rName").textContent = pr.name;
-    $("rId").textContent = pr.id;
-    $("rRoom").textContent = pr.room;
-    $("rDept").textContent = pr.dept || "-";
-    $("rReq").textContent = fmt(p.requestedAt);
-    $("rTimeLbl").textContent = going ? "Exit time" : "Entry time";
-    $("rTime").textContent = fmt(p.time || p.requestedAt);
-    $("rPurRow").style.display = p.purpose ? "flex" : "none";
-    $("rPur").textContent = p.purpose || "";
-    var badge = $("badge");
-    if (p.status === "approved") {
-      badge.className = "badge ok"; badge.innerHTML = "&#10003;";
-      $("stTitle").textContent = (going ? "Exit" : "Entry") + " approved";
-      $("stText").textContent = going ? "You may leave. Register again when you return." : "Welcome back to Gandhi Hostel.";
-      $("rApp").textContent = fmt(p.approvedAt);
-      $("rAppRow").style.display = p.approvedAt ? "flex" : "none";
-      $("backBtn").style.display = "block";
-    } else if (p.status === "rejected") {
-      badge.className = "badge no"; badge.innerHTML = "&#10005;";
-      $("stTitle").textContent = "Request declined";
-      $("stText").textContent = "Please speak to the guard.";
-      $("rAppRow").style.display = "none";
-      $("backBtn").style.display = "block";
-    } else {
-      badge.className = "badge wait"; badge.innerHTML = "&#8987;";
-      $("stTitle").textContent = "Waiting for guard approval";
-      $("stText").textContent = "Your " + (going ? "exit" : "entry") + " request was sent. Keep this screen open.";
-      $("rAppRow").style.display = "none";
-      $("backBtn").style.display = "none";
-    }
-    showView("status");
-  }
-
-  function startPolling() {
-    stopPolling();
-    timer = setInterval(function () {
-      db("GET", "/students/" + encodeURIComponent(session.profile.key)).then(function (node) {
-        var p = node && node.pending;
-        if (p && p.status !== "pending") { stopPolling(); renderStatus(p); }
-      }).catch(function () {});
-    }, POLL_MS);
-  }
-  function stopPolling() { if (timer) { clearInterval(timer); timer = null; } }
-
-  // ---- Actions ----
-  function signIn() {
-    say("siMsg", "");
-    if (!need(["siEmail", "siPass"])) return;
-    if (!configured) return say("siMsg", "Not connected yet. Set DB_URL and API_KEY.");
-    var btn = $("siBtn"); busy(btn, true);
-    authCall("signInWithPassword", {
-      email: $("siEmail").value.trim(), password: $("siPass").value, returnSecureToken: true
-    }).then(function (j) {
-      session = null;
-      setSession(j.localId, j.idToken, j.refreshToken, j.expiresIn);
-      return db("GET", "/users/" + session.uid);
-    }).then(function (profile) {
-      if (!profile) throw new Error("INVALID_LOGIN_CREDENTIALS");
-      session.profile = profile;
-      $("siPass").value = "";
-      openHome();
-    }).catch(function (e) { say("siMsg", explain(e)); })
-      .then(function () { busy(btn, false, "Sign in"); });
-  }
-
-  // ---- Hostel list lookup (reads one roll number at a time) ----
-  var lookupSeq = 0, lookupTimer = null;
-  function rosterGet(key) {
-    return fetch(base + "/roster/" + encodeURIComponent(key) + ".json").then(function (r) {
-      if (!r.ok) throw new Error("DB_ERROR");
-      return r.json();
+  // Show / hide password buttons
+  Array.prototype.forEach.call(document.querySelectorAll('input[type="password"]'), function (input) {
+    var wrap = document.createElement("div");
+    wrap.className = "pw";
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "pw-toggle"; btn.textContent = "Show";
+    btn.setAttribute("aria-label", "Show password"); btn.setAttribute("aria-pressed", "false");
+    btn.addEventListener("click", function () {
+      var hidden = input.type === "password";
+      input.type = hidden ? "text" : "password";
+      btn.textContent = hidden ? "Hide" : "Show";
+      btn.setAttribute("aria-label", hidden ? "Hide password" : "Show password");
+      btn.setAttribute("aria-pressed", hidden ? "true" : "false");
     });
+    wrap.appendChild(btn);
+  });
+
+  // ---- Auth panes ----
+  function showPane(name) {
+    ["paneIn", "paneUp", "paneFp"].forEach(function (p) { $(p).classList.toggle("hide", p !== name); });
+    $("tabIn").classList.toggle("on", name === "paneIn" || name === "paneFp");
+    $("tabUp").classList.toggle("on", name === "paneUp");
   }
+
+  // ---- Roll number lookup (name and department come from the student list) ----
   function lookupRoll() {
     var id = $("suId").value.trim(), hint = $("suLookup");
     $("suName").value = ""; $("suDept").value = "";
@@ -422,173 +340,242 @@
     rosterGet(toKey(id)).then(function (r) {
       if (mine !== lookupSeq) return;
       if (r && r.name) { $("suName").value = r.name; $("suDept").value = r.dept || ""; hint.textContent = "Roll number found."; }
-      else hint.textContent = "Roll number not found in the hostel list.";
+      else hint.textContent = "Roll number not found in the student list.";
     }).catch(function () { if (mine === lookupSeq) hint.textContent = "Could not check. Check your internet connection."; });
   }
-  $("suId").addEventListener("input", function () { clearTimeout(lookupTimer); lookupTimer = setTimeout(lookupRoll, 350); });
 
+  // ---- Create account ----
   function signUp() {
     say("suMsg", "");
-    if (!need(["suId", "suRoom", "suEmail", "suPass"])) return;
-    if (!configured) return say("suMsg", "Not connected yet. Set DB_URL and API_KEY.");
-    var profile = {
-      name: $("suName").value.trim(),
-      id: $("suId").value.trim().toUpperCase(),
-      room: $("suRoom").value.trim().toUpperCase(),
-      dept: $("suDept").value.trim(),
-      email: $("suEmail").value.trim()
-    };
-    profile.key = toKey(profile.id);
+    if (!need(["suId", "suRoom", "suPhone", "suEmail", "suPass"])) return;
+    if (!configured) return say("suMsg", "Not connected yet. Set DB_URL and API_KEY.", "bad");
+    var phone = $("suPhone").value.replace(/[\s-]/g, "");
+    if (phone.length > 10) phone = phone.replace(/^(\+91|91|0)/, "");
+    if (!/^[6-9]\d{9}$/.test(phone)) { $("suPhone").classList.add("invalid"); return say("suMsg", "Enter a valid 10-digit mobile number.", "bad"); }
+    if ($("suPass").value.length < 6) return say("suMsg", "Password must be at least 6 characters.", "bad");
+
+    var id = $("suId").value.trim().toUpperCase(), key = toKey(id);
+    var email = $("suEmail").value.trim(), room = $("suRoom").value.trim().toUpperCase();
     var btn = $("suBtn"); busy(btn, true);
     session = null;
-    rosterGet(profile.key).then(function (r) {
+
+    var fresh = true;
+    rosterGet(key).then(function (r) {
       if (!r || !r.name) throw new Error("ROLL_NOT_FOUND");
-      profile.name = r.name; profile.dept = r.dept || ""; // taken from the hostel list, not the form
-      return authCall("signUp", { email: profile.email, password: $("suPass").value, returnSecureToken: true });
+      profile = { uid: "", id: id, name: r.name, dept: r.dept || "", room: room, phone: phone, email: email, createdAt: { ".sv": "timestamp" } };
+      var pass = $("suPass").value;
+      return authCall("signUp", { email: email, password: pass, returnSecureToken: true }).catch(function (e) {
+        if (String(e.message).split(" ")[0] !== "EMAIL_EXISTS") throw e;
+        // The email already has an account (for example from an attempt that stopped half-way).
+        // Sign in with the same password and finish setting it up instead of showing an error.
+        fresh = false;
+        return authCall("signInWithPassword", { email: email, password: pass, returnSecureToken: true }).catch(function () {
+          throw new Error("EMAIL_IN_USE");
+        });
+      });
     }).then(function (j) {
-        setSession(j.localId, j.idToken, j.refreshToken, j.expiresIn);
-        return db("GET", "/students/" + encodeURIComponent(profile.key)).catch(function (e) {
-          if (e.status === 401 || e.status === 403) return { uid: "someone-else" };
-          throw e;
-        });
-      }).then(function (existing) {
-        if (existing && existing.uid && existing.uid !== session.uid) {
-          // Student ID already belongs to another account: undo this sign-up
-          return authCall("delete", { idToken: session.idToken }).catch(function () {}).then(function () {
-            session = null;
-            throw new Error("ID_TAKEN");
-          });
+      setSession(j.localId, j.idToken, j.refreshToken, j.expiresIn);
+      session.email = j.email;
+      profile.uid = j.localId;
+      return db("GET", "/users/" + session.uid);
+    }).then(function (existing) {
+      if (existing) { profile = existing; return; } // profile is complete already: just sign in
+      // The roll number can belong to one account only
+      return db("PUT", "/students/" + encodeURIComponent(key), profile).catch(function (e) {
+        if (e.status === 401 || e.status === 403) {
+          if (!fresh) throw new Error("ID_TAKEN");
+          return authCall("delete", { idToken: session.idToken }).then(function () { throw new Error("ID_TAKEN"); });
         }
-        return db("PUT", "/users/" + session.uid, profile).then(function () {
-          return db("PATCH", "/students/" + encodeURIComponent(profile.key), {
-            name: profile.name, id: profile.id, room: profile.room, dept: profile.dept, email: profile.email,
-            uid: session.uid, hostel: "Gandhi Hostel"
-          });
-        });
+        throw e;
       }).then(function () {
-        session.profile = profile;
-        $("suPass").value = "";
-        openHome();
-      }).catch(function (e) { say("suMsg", explain(e)); })
-        .then(function () { busy(btn, false, "Create account"); });
+        return db("PUT", "/users/" + session.uid, profile);
+      });
+    }).then(function () {
+      $("suPass").value = "";
+      openHome();
+    }).catch(function (e) {
+      session = null; profile = null;
+      try { localStorage.removeItem(STORAGE_KEY); } catch (x) {}
+      say("suMsg", explain(e), "bad");
+    }).then(function () { busy(btn, false, "Create account"); });
   }
 
+  // ---- Sign in / out / forgot ----
+  function loadProfile() {
+    return db("GET", "/users/" + session.uid).then(function (p) {
+      if (!p) throw new Error("PROFILE_MISSING");
+      profile = p;
+    });
+  }
+  function signIn() {
+    say("siMsg", "");
+    if (!need(["siEmail", "siPass"])) return;
+    if (!configured) return say("siMsg", "Not connected yet. Set DB_URL and API_KEY.", "bad");
+    var btn = $("siBtn"); busy(btn, true);
+    authCall("signInWithPassword", { email: $("siEmail").value.trim(), password: $("siPass").value, returnSecureToken: true })
+      .then(function (j) {
+        session = null;
+        setSession(j.localId, j.idToken, j.refreshToken, j.expiresIn);
+        session.email = j.email;
+        return loadProfile();
+      }).then(function () {
+        $("siPass").value = "";
+        openHome();
+      }).catch(function (e) {
+        session = null; profile = null;
+        try { localStorage.removeItem(STORAGE_KEY); } catch (x) {}
+        if (String(e.message).indexOf("PROFILE_MISSING") === 0) {
+          $("suEmail").value = $("siEmail").value; $("suPass").value = $("siPass").value;
+          showPane("paneUp");
+          say("suMsg", "Your account was not finished. Enter your roll number, room and mobile number, then tap Create account.");
+          return;
+        }
+        say("siMsg", explain(e), "bad");
+      }).then(function () { busy(btn, false, "Sign in"); });
+  }
+  function signOut(note) {
+    session = null; profile = null; lastEntry = null;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    $("homeView").classList.add("hide");
+    $("authView").classList.remove("hide");
+    showPane("paneIn");
+    say("siMsg", note || "", note ? "bad" : "");
+    window.scrollTo(0, 0);
+  }
   function forgot() {
     say("fpMsg", "");
     if (!need(["fpEmail"])) return;
-    if (!configured) return say("fpMsg", "Not connected yet. Set DB_URL and API_KEY.");
+    if (!configured) return say("fpMsg", "Not connected yet. Set DB_URL and API_KEY.", "bad");
     var btn = $("fpBtn"); busy(btn, true);
     var sent = "If this email has an account, a reset link is on its way. Check your inbox and spam folder.";
     authCall("sendOobCode", { requestType: "PASSWORD_RESET", email: $("fpEmail").value.trim() })
-      .then(function () { say("fpMsg", sent, true); })
+      .then(function () { say("fpMsg", sent, "good"); })
       .catch(function (e) {
         var code = String(e.message || "").split(" ")[0];
-        // Do not reveal whether an email is registered
-        if (code === "EMAIL_NOT_FOUND") say("fpMsg", sent, true);
-        else say("fpMsg", explain(e));
-      })
-      .then(function () { busy(btn, false, "Send reset link"); });
+        if (code === "EMAIL_NOT_FOUND") say("fpMsg", sent, "good"); // do not reveal which emails have accounts
+        else say("fpMsg", explain(e), "bad");
+      }).then(function () { busy(btn, false, "Send reset link"); });
   }
 
-  function sendRequest() {
-    say("hMsg", "");
-    var p = session.profile;
-    var going = nextType === "out";
-    var timeVal = $("hTime").value, purpose = $("hPurpose").value;
-    if (!timeVal) return say("hMsg", "Choose the " + (going ? "exit" : "entry") + " time.");
-    if (going && !purpose) { $("hPurpose").classList.add("invalid"); return say("hMsg", "Choose a purpose."); }
-    var btn = $("sendBtn"); busy(btn, true);
-    db("GET", "/students/" + encodeURIComponent(p.key)).then(function (node) {
-      node = node || {};
-      if (node.pending && node.pending.status === "pending") return node.pending; // already waiting
-      // Inside (or new) -> exit request. Out -> entry request.
-      var type = node.state === "out" ? "in" : "out";
-      if (type !== nextType) { nextType = type; updateForm(); throw new Error("STATE_CHANGED"); }
-      var pending = {
-        type: type,
-        requestedAt: new Date().toISOString(), // recorded automatically
-        time: new Date(timeVal).toISOString(), // exit / entry time chosen by the student
-        status: "pending"
-      };
-      if (type === "out") pending.purpose = purpose;
-      return db("PATCH", "/students/" + encodeURIComponent(p.key), {
-        name: p.name, id: p.id, room: p.room, dept: p.dept || "", hostel: "Gandhi Hostel", pending: pending
-      }).then(function () { return pending; });
-    }).then(function (pend) {
-      renderStatus(pend);
-      startPolling();
-    }).catch(function (e) { say("hMsg", explain(e)); })
-      .then(function () { busy(btn, false, sendLabel()); });
+  // ---- After sign in ----
+  function latestEntry() {
+    var q = "orderBy=" + encodeURIComponent('"uid"') + "&equalTo=" + encodeURIComponent('"' + session.uid + '"') + "&limitToLast=1";
+    return db("GET", "/entries", undefined, q).then(function (d) {
+      if (!d) return null;
+      var keys = Object.keys(d);
+      return keys.length ? d[keys[keys.length - 1]] : null;
+    });
+  }
+  function hideCards() { ["waitCard", "regCard", "doneCard"].forEach(function (c) { $(c).classList.add("hide"); }); }
+
+  function openHome() {
+    $("authView").classList.add("hide");
+    $("homeView").classList.remove("hide");
+    $("who").textContent = profile.name;
+    refreshHome();
+  }
+  function refreshHome() {
+    hideCards(); say("homeMsg", "");
+    db("GET", "/approved/" + session.uid).then(function (ok) {
+      if (ok !== true) { $("waitCard").classList.remove("hide"); return; }
+      return latestEntry().then(function (e) {
+        lastEntry = e;
+        inside = !e || e.type === "in";
+        renderReg();
+      });
+    }).catch(function (e) {
+      if (String(e.message).indexOf("SESSION_EXPIRED") === 0) signOut(explain(e));
+      else say("homeMsg", explain(e), "bad");
+    });
+  }
+  function renderReg() {
+    hideCards();
+    $("regCard").classList.remove("hide");
+    $("rName").textContent = profile.name;
+    $("rId").textContent = profile.id;
+    $("rRoom").textContent = profile.room || "-";
+    $("rDept").textContent = profile.dept || "-";
+    $("rPhone").textContent = profile.phone || "-";
+    $("regTitle").textContent = inside ? "Register your exit" : "Register your entry";
+    $("stateLine").textContent = inside
+      ? "You are inside the hostel."
+      : "You are outside. You left on " + fmt(lastEntry.at) + (lastEntry.purpose ? " for " + lastEntry.purpose : "") + ".";
+    $("purposeField").classList.toggle("hide", !inside);
+    $("purpose").value = ""; $("purpose").classList.remove("invalid");
+    $("regBtn").textContent = inside ? "Register exit" : "Register entry";
+    var scanned = !!gateToken();
+    $("gateWarn").classList.toggle("hide", scanned);
+    $("regBtn").disabled = !scanned;
+    say("regMsg", "");
   }
 
-  function signOut() {
-    stopPolling();
-    session = null;
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-    showPane("In");
-    showView("auth");
+  function register() {
+    say("regMsg", "");
+    var gate = gateToken();
+    if (!gate) { renderReg(); return; }
+    var purpose = $("purpose").value;
+    if (inside && !purpose) { $("purpose").classList.add("invalid"); return say("regMsg", "Choose where you are going.", "bad"); }
+
+    var entry = {
+      uid: session.uid, id: profile.id, name: profile.name, room: profile.room || "", dept: profile.dept || "", phone: profile.phone || "",
+      type: inside ? "out" : "in", purpose: inside ? purpose : "",
+      gate: gate,
+      at: { ".sv": "timestamp" } // the time comes from the server clock, so it cannot be changed
+    };
+    var btn = $("regBtn"); busy(btn, true);
+    db("POST", "/entries", entry).then(function () {
+      try { sessionStorage.removeItem(GATE_KEY); } catch (e) {} // the next exit or entry needs a fresh scan
+      return latestEntry();
+    }).then(function (e) {
+      showDone(e || { type: entry.type, purpose: entry.purpose, at: Date.now() });
+    }).catch(function (e) {
+      busy(btn, false, inside ? "Register exit" : "Register entry");
+      if (e.status === 401 || e.status === 403) {
+        say("regMsg", "Could not save. Scan the gate QR again. If it keeps failing, ask the warden to check your account.", "bad");
+        try { sessionStorage.removeItem(GATE_KEY); } catch (x) {}
+        $("regBtn").disabled = true; $("gateWarn").classList.remove("hide");
+      } else if (String(e.message).indexOf("SESSION_EXPIRED") === 0) signOut(explain(e));
+      else say("regMsg", explain(e), "bad");
+    });
+  }
+  function showDone(e) {
+    hideCards();
+    $("doneCard").classList.remove("hide");
+    $("doneTitle").textContent = e.type === "out" ? "Exit registered" : "Entry registered";
+    $("doneText").textContent = "Saved on " + fmt(e.at) + (e.type === "out" && e.purpose ? " for " + e.purpose : "") + ".";
   }
 
   // ---- Wiring ----
-  $("tabIn").addEventListener("click", function () { showPane("In"); });
-  $("tabUp").addEventListener("click", function () { showPane("Up"); });
-  $("toForgot").addEventListener("click", function () {
-    $("fpEmail").value = $("siEmail").value;
-    showPane("Fp");
-  });
-  $("toSignin").addEventListener("click", function () { showPane("In"); });
+  $("tabIn").addEventListener("click", function () { showPane("paneIn"); });
+  $("tabUp").addEventListener("click", function () { showPane("paneUp"); });
+  $("toForgot").addEventListener("click", function () { $("fpEmail").value = $("siEmail").value; say("fpMsg", ""); showPane("paneFp"); });
+  $("toSignin").addEventListener("click", function () { showPane("paneIn"); });
   $("siBtn").addEventListener("click", signIn);
   $("suBtn").addEventListener("click", signUp);
   $("fpBtn").addEventListener("click", forgot);
-  $("sendBtn").addEventListener("click", sendRequest);
-  $("outBtn").addEventListener("click", signOut);
-  $("backBtn").addEventListener("click", function () { stopPolling(); showView("home"); });
-
-  ["siEmail", "siPass", "suName", "suId", "suRoom", "suEmail", "suPass", "fpEmail"].forEach(function (id) {
-    $(id).addEventListener("input", function () { $(id).classList.remove("invalid"); });
-  });
+  $("outBtn").addEventListener("click", function () { signOut(); });
+  $("recheckBtn").addEventListener("click", refreshHome);
+  $("regBtn").addEventListener("click", register);
+  $("doneBtn").addEventListener("click", refreshHome);
+  $("suId").addEventListener("input", function () { clearTimeout(lookupTimer); lookupTimer = setTimeout(lookupRoll, 350); });
   $("siPass").addEventListener("keydown", function (e) { if (e.key === "Enter") signIn(); });
   $("fpEmail").addEventListener("keydown", function (e) { if (e.key === "Enter") forgot(); });
+  ["siEmail", "siPass", "suId", "suRoom", "suPhone", "suEmail", "suPass", "fpEmail", "purpose"].forEach(function (id) {
+    $(id).addEventListener("input", function () { $(id).classList.remove("invalid"); });
+  });
 
   // ---- Stay signed in on this phone ----
   try {
     var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
     if (configured && saved && saved.rt) {
       refreshSession(saved.rt).then(function () {
-        return db("GET", "/users/" + session.uid);
-      }).then(function (profile) {
-        if (!profile) throw new Error("SESSION_EXPIRED");
-        session.profile = profile;
-        openHome();
-      }).catch(function () { session = null; });
+        return authCall("lookup", { idToken: session.idToken });
+      }).then(function (j) {
+        session.email = j.users && j.users[0] && j.users[0].email;
+        return loadProfile();
+      }).then(openHome).catch(function () { session = null; profile = null; });
     }
   } catch (e) {}
-})();
-</script>
-<script>
-// Show / hide password buttons on every password field
-(function () {
-  var inputs = document.querySelectorAll('input[type="password"]');
-  Array.prototype.forEach.call(inputs, function (input) {
-    var wrap = document.createElement("div");
-    wrap.className = "pw";
-    input.parentNode.insertBefore(wrap, input);
-    wrap.appendChild(input);
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "pw-toggle";
-    btn.textContent = "Show";
-    btn.setAttribute("aria-label", "Show password");
-    btn.setAttribute("aria-pressed", "false");
-    btn.addEventListener("click", function () {
-      var hidden = input.type === "password";
-      input.type = hidden ? "text" : "password";
-      btn.textContent = hidden ? "Hide" : "Show";
-      btn.setAttribute("aria-label", hidden ? "Hide password" : "Show password");
-      btn.setAttribute("aria-pressed", hidden ? "true" : "false");
-    });
-    wrap.appendChild(btn);
-  });
 })();
 </script>
 </body>

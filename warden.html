@@ -11,6 +11,7 @@
   *{box-sizing:border-box}
   html,body{margin:0}
   body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.45;min-height:100vh;-webkit-text-size-adjust:100%}
+  .hide{display:none!important}
   .masthead{background:var(--navy);color:#fff;border-bottom:4px solid var(--gold);text-align:center;padding:calc(22px + env(safe-area-inset-top,0px)) 20px 70px}
   .crest{width:46px;height:46px;display:block;margin:0 auto 8px}
   .masthead h1{font-family:var(--serif);font-weight:600;font-size:1.5rem;margin:0 0 2px}
@@ -31,33 +32,39 @@
     background:linear-gradient(180deg,var(--navy-2),var(--navy));box-shadow:0 2px 0 var(--gold),0 8px 16px rgba(13,34,64,.22)}
   .btn:disabled{opacity:.6}
   .link{display:block;margin:14px auto 0;font:inherit;font-size:.92rem;font-weight:600;color:var(--navy-2);background:none;border:0;cursor:pointer;text-decoration:underline;padding:6px}
-  .btn:focus-visible,.link:focus-visible,.tab:focus-visible,.pw-toggle:focus-visible,.act:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .btn:focus-visible,.link:focus-visible,.tab:focus-visible,.pw-toggle:focus-visible,.act:focus-visible,.chip:focus-visible,.small:focus-visible,.out:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   .notice{background:#fff7e0;border:1px solid #ecd48a;color:#6b5210;border-radius:10px;padding:12px 14px;font-size:.86rem;margin-bottom:14px}
-  .msg{font-size:.86rem;margin:0 0 12px}
+  .msg{font-size:.86rem;margin:0 0 12px;color:var(--muted)}
   .msg.bad{color:var(--err)}
   .msg.good{color:var(--ok);font-weight:600}
-  .hide{display:none}
 
-  .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;color:#fff}
+  .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
   .bar span{font-size:.86rem;color:var(--muted);word-break:break-all}
   .out{font:inherit;font-size:.86rem;font-weight:600;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer;white-space:nowrap}
   .tabs{display:flex;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:12px;box-shadow:0 8px 22px rgba(13,34,64,.12)}
-  .tab{flex:1;font:inherit;font-weight:600;font-size:.95rem;padding:12px 8px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer}
+  .tab{flex:1;font:inherit;font-weight:600;font-size:.88rem;padding:12px 4px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer}
   .tab.on{background:var(--navy);color:#fff}
+  .toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+  .small{font:inherit;font-size:.84rem;font-weight:600;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer;white-space:nowrap}
   .item{background:#fff;border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:12px;padding:14px 16px;margin-bottom:12px}
   .item.in{border-left-color:var(--ok)}
   .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-  .nm{font-family:var(--serif);font-size:1.15rem;color:var(--navy);margin:0;word-break:break-word}
+  .nm{font-family:var(--serif);font-size:1.12rem;color:var(--navy);margin:0;word-break:break-word}
   .tag{font-size:.78rem;font-weight:700;padding:4px 9px;border-radius:99px;white-space:nowrap}
-  .tag.out{background:#fdf1d6;color:#7a5a10;border:0;padding:4px 9px;cursor:default}
+  .tag.out{background:#fdf1d6;color:#7a5a10}
   .tag.in{background:#dcf3e6;color:var(--ok)}
-  .meta{margin:6px 0 0;font-size:.88rem;color:var(--muted)}
-  .acts{display:flex;gap:10px;margin-top:12px}
-  .act{flex:1;font:inherit;font-weight:600;font-size:.98rem;padding:13px;border-radius:10px;border:0;cursor:pointer;color:#fff}
-  .act.ok{background:var(--ok)}
-  .act.no{background:#fff;color:var(--err);border:1.5px solid var(--err)}
+  .meta{margin:5px 0 0;font-size:.88rem;color:var(--muted);word-break:break-word}
+  .act{width:100%;margin-top:12px;font:inherit;font-weight:600;font-size:.98rem;padding:13px;border-radius:10px;border:0;cursor:pointer;color:#fff;background:var(--ok)}
   .act:disabled{opacity:.55}
+  .call{display:inline-block;margin-top:12px;padding:12px 18px;border-radius:10px;background:var(--navy-2);color:#fff;text-decoration:none;font-weight:600}
+  .tel{color:var(--navy-2);font-weight:700}
   .empty{text-align:center;color:var(--muted);padding:34px 10px;background:#fff;border:1px dashed var(--line);border-radius:12px}
+  .chips{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .chip{font:inherit;font-size:.86rem;font-weight:600;padding:9px 14px;border-radius:99px;border:1.5px solid var(--line);background:#fff;color:var(--muted);cursor:pointer}
+  .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .search{margin-bottom:12px}
+  .count{font-size:.88rem;color:var(--muted);margin:0 0 12px}
+  .xl{background:var(--ok);margin-bottom:14px;box-shadow:none}
 </style>
 </head>
 <body>
@@ -83,7 +90,7 @@
       <div class="field"><label for="siEmail">Email</label>
         <input id="siEmail" type="email" autocomplete="email" placeholder="warden@example.com"></div>
       <div class="field"><label for="siPass">Password</label>
-        <div class="pw"><input id="siPass" type="password" autocomplete="current-password" placeholder="Your password"><button class="pw-toggle" id="pwBtn" type="button" aria-label="Show password" aria-pressed="false">Show</button></div></div>
+        <input id="siPass" type="password" autocomplete="current-password" placeholder="Your password"></div>
       <p class="msg" id="siMsg"></p>
       <button class="btn" id="siBtn" type="button">Sign in</button>
       <button class="link" id="toForgot" type="button">Forgot password?</button>
@@ -104,34 +111,51 @@
   <section id="deskView" class="hide">
     <div class="bar"><span id="who"></span><button class="out" id="outBtn" type="button">Sign out</button></div>
     <div class="tabs" role="tablist">
-      <button class="tab on" id="tabPending" role="tab" type="button">Pending (0)</button>
+      <button class="tab on" id="tabAcc" role="tab" type="button">Accounts (0)</button>
       <button class="tab" id="tabOut" role="tab" type="button">Out now (0)</button>
+      <button class="tab" id="tabRec" role="tab" type="button">Records</button>
     </div>
-    <p class="msg" id="msg"></p>
-    <div id="list"></div>
+    <div class="toolbar"><p class="msg" id="msg" style="margin:0"></p><button class="small" id="refreshBtn" type="button">Refresh</button></div>
+
+    <div id="paneAcc"></div>
+    <div id="paneOut" class="hide"></div>
+    <div id="paneRec" class="hide">
+      <div class="chips" id="chips">
+        <button class="chip on" type="button" data-r="today">Today</button>
+        <button class="chip" type="button" data-r="7">Last 7 days</button>
+        <button class="chip" type="button" data-r="30">Last 30 days</button>
+      </div>
+      <input class="search" id="q" type="search" placeholder="Search by name or roll number">
+      <p class="count" id="count"></p>
+      <button class="btn xl" id="xlBtn" type="button">Download Excel</button>
+      <div id="recList"></div>
+    </div>
   </section>
 
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 (function () {
-  // ---- Settings: use the same two values as student.html ----
+  // ---- Settings: same two values as the student page ----
   var DB_URL = "https://gandhi-hostel-default-rtdb.asia-southeast1.firebasedatabase.app";
   var API_KEY = "AIzaSyDiNFVaxdes7KXSzmEmiN51GGejtsK8qVI";
   var STORAGE_KEY = "gandhiWardenSession";
-  var POLL_MS = 5000;
+  var ACCOUNTS_REFRESH_MS = 120000;   // accounts: every 2 minutes
+  var ENTRIES_REFRESH_MS = 300000;    // records: every 5 minutes
+  var DAY = 86400000;
 
   var $ = function (id) { return document.getElementById(id); };
   var configured = DB_URL.indexOf("YOUR-PROJECT") === -1 && API_KEY.indexOf("YOUR-WEB") === -1;
   var base = DB_URL.replace(/\/$/, "");
-  var session = null; // {uid, email, idToken, refreshToken, exp}
-  var data = {};
-  var tab = "pending";
-  var timer = null;
+  var session = null;
+  var students = {}, approved = {}, entries = [], loadedDays = 0;
+  var tab = "acc", range = "today";
+  var lastAcc = 0, lastEnt = 0;
 
   if (!configured) $("setupNotice").classList.remove("hide");
 
-  // ---- Firebase Auth (REST) ----
+  // ---- Firebase Auth + Database (REST) ----
   function authCall(endpoint, body) {
     return fetch("https://identitytoolkit.googleapis.com/v1/accounts:" + endpoint + "?key=" + encodeURIComponent(API_KEY), {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body)
@@ -163,14 +187,14 @@
     if (session.exp - Date.now() > 60000) return Promise.resolve(session.idToken);
     return refreshSession(session.refreshToken).then(function () { return session.idToken; });
   }
-  function db(method, path, body) {
+  function db(method, path, body, query) {
     return token().then(function (t) {
-      return fetch(base + path + ".json?auth=" + encodeURIComponent(t), {
+      return fetch(base + path + ".json?auth=" + encodeURIComponent(t) + (query ? "&" + query : ""), {
         method: method, headers: { "Content-Type": "application/json" },
         body: body === undefined ? undefined : JSON.stringify(body)
       });
     }).then(function (r) {
-      if (!r.ok) throw new Error("DB_ERROR");
+      if (!r.ok) { var err = new Error("DB_ERROR"); err.status = r.status; throw err; }
       return r.json();
     });
   }
@@ -197,9 +221,14 @@
     m.className = "msg" + (text && kind ? " " + kind : "");
   }
   function busy(btn, on, label) { btn.disabled = on; btn.textContent = on ? "Please wait..." : label; }
-  function fmt(iso) {
-    if (!iso) return "-";
-    return new Date(iso).toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  function fmt(ms) {
+    if (!ms) return "-";
+    return new Date(ms).toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  }
+  function dur(ms) {
+    var m = Math.max(0, Math.floor(ms / 60000)), h = Math.floor(m / 60);
+    if (h >= 24) return Math.floor(h / 24) + "d " + (h % 24) + "h";
+    return h + "h " + (m % 60) + "m";
   }
   function el(tag, cls, text) {
     var e = document.createElement(tag);
@@ -207,33 +236,57 @@
     if (text !== undefined) e.textContent = text;
     return e;
   }
+  function phoneRow(card, phone, big) {
+    var num = String(phone || "").replace(/[^\d+]/g, "");
+    if (!num) return;
+    if (big) {
+      var a = el("a", "call", "Call " + num); a.href = "tel:" + num; card.appendChild(a);
+    } else {
+      var p = el("p", "meta", "Mobile: ");
+      var l = el("a", "tel", num); l.href = "tel:" + num;
+      p.appendChild(l); card.appendChild(p);
+    }
+  }
+
+  // Show / hide password
+  Array.prototype.forEach.call(document.querySelectorAll('input[type="password"]'), function (input) {
+    var wrap = el("div", "pw");
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+    var btn = el("button", "pw-toggle", "Show");
+    btn.type = "button";
+    btn.setAttribute("aria-label", "Show password"); btn.setAttribute("aria-pressed", "false");
+    btn.addEventListener("click", function () {
+      var hidden = input.type === "password";
+      input.type = hidden ? "text" : "password";
+      btn.textContent = hidden ? "Hide" : "Show";
+      btn.setAttribute("aria-label", hidden ? "Hide password" : "Show password");
+      btn.setAttribute("aria-pressed", hidden ? "true" : "false");
+    });
+    wrap.appendChild(btn);
+  });
 
   // ---- Sign in / out ----
-  function openDesk() {
-    $("who").textContent = session.email || "Signed in";
-    $("authView").classList.add("hide");
-    $("deskView").classList.remove("hide");
-    window.scrollTo(0, 0);
-    load();
-    clearInterval(timer);
-    timer = setInterval(load, POLL_MS);
-  }
-  function signOut(note) {
-    clearInterval(timer); timer = null;
-    session = null; data = {};
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-    $("deskView").classList.add("hide");
-    $("authView").classList.remove("hide");
-    $("paneFp").classList.add("hide");
-    $("paneIn").classList.remove("hide");
-    say("siMsg", note || "", note ? "bad" : "");
-  }
   function checkWarden() {
     return db("GET", "/wardens/" + session.uid).then(function (ok) {
       if (ok !== true) throw new Error("NOT_WARDEN");
     });
   }
-
+  function openDesk() {
+    $("who").textContent = session.email || "Signed in";
+    $("authView").classList.add("hide");
+    $("deskView").classList.remove("hide");
+    window.scrollTo(0, 0);
+    refreshAll();
+  }
+  function signOut(note) {
+    session = null; students = {}; approved = {}; entries = []; loadedDays = 0;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    $("deskView").classList.add("hide");
+    $("authView").classList.remove("hide");
+    $("paneFp").classList.add("hide"); $("paneIn").classList.remove("hide");
+    say("siMsg", note || "", note ? "bad" : "");
+  }
   function signIn() {
     say("siMsg", "");
     var ok = true;
@@ -261,7 +314,6 @@
         say("siMsg", msg, "bad");
       }).then(function () { busy(btn, false, "Sign in"); });
   }
-
   function forgot() {
     say("fpMsg", "");
     if (!$("fpEmail").value.trim()) { $("fpEmail").classList.add("invalid"); return; }
@@ -272,131 +324,209 @@
       .then(function () { say("fpMsg", sent, "good"); })
       .catch(function (e) {
         var code = String(e.message || "").split(" ")[0];
-        if (code === "EMAIL_NOT_FOUND") say("fpMsg", sent, "good"); // do not reveal registered emails
+        if (code === "EMAIL_NOT_FOUND") say("fpMsg", sent, "good");
         else say("fpMsg", explain(e), "bad");
       }).then(function () { busy(btn, false, "Send reset link"); });
   }
 
-  // ---- Requests ----
-  function load() {
-    if (!session) return;
-    db("GET", "/students").then(function (d) {
-      data = d || {};
-      say("msg", "Updated " + new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+  // ---- Data loading ----
+  function handleLoadError(e) {
+    if (String(e.message).indexOf("SESSION_EXPIRED") === 0) signOut(explain(e));
+    else say("msg", "Cannot load data. " + explain(e), "bad");
+  }
+  function loadAccounts() {
+    return Promise.all([db("GET", "/students"), db("GET", "/approved")]).then(function (r) {
+      students = r[0] || {}; approved = r[1] || {};
+      lastAcc = Date.now();
       render();
-    }).catch(function (e) {
-      if (String(e.message).indexOf("SESSION_EXPIRED") === 0) signOut(explain(e));
-      else say("msg", "Cannot load requests. Retrying...", "bad");
+    }).catch(handleLoadError);
+  }
+  function loadEntries() {
+    var days = Math.max(10, range === "30" ? 30 : 10); // 10 days always, so "Out now" is complete
+    var q = "orderBy=" + encodeURIComponent('"at"') + "&startAt=" + (Date.now() - days * DAY);
+    return db("GET", "/entries", undefined, q).then(function (d) {
+      entries = Object.keys(d || {}).map(function (k) { var e = d[k]; e._id = k; return e; })
+        .sort(function (a, b) { return b.at - a.at; });
+      loadedDays = days; lastEnt = Date.now();
+      render();
+    }).catch(handleLoadError);
+  }
+  function refreshAll() {
+    say("msg", "Loading...");
+    Promise.all([loadAccounts(), loadEntries()]).then(function () {
+      if (session) say("msg", "Updated " + new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }));
     });
   }
-  function pendingList() {
-    return Object.keys(data).filter(function (k) {
-      var p = data[k] && data[k].pending; return p && p.status === "pending";
-    }).sort(function (a, b) { return data[a].pending.requestedAt < data[b].pending.requestedAt ? -1 : 1; });
+
+  // ---- Accounts (approved once, when the account is created) ----
+  function pendingAccounts() {
+    return Object.keys(students).filter(function (k) {
+      var s = students[k]; return s && s.uid && approved[s.uid] !== true;
+    }).sort(function (a, b) { return (students[a].createdAt || 0) - (students[b].createdAt || 0); });
   }
-  function outList() {
-    return Object.keys(data).filter(function (k) { return data[k] && data[k].state === "out"; })
-      .sort(function (a, b) { return (data[a].lastOut || "") < (data[b].lastOut || "") ? 1 : -1; });
+  function approve(key, btn) {
+    var s = students[key];
+    btn.disabled = true; btn.textContent = "Approving...";
+    db("PUT", "/approved/" + s.uid, true).then(loadAccounts).catch(function (e) {
+      btn.disabled = false; btn.textContent = "Approve as hostel student";
+      say("msg", "Could not approve. " + explain(e), "bad");
+    });
+  }
+  function renderAccounts() {
+    var box = $("paneAcc"); box.innerHTML = "";
+    var list = pendingAccounts();
+    var total = Object.keys(approved).filter(function (u) { return approved[u] === true; }).length;
+    $("tabAcc").textContent = "Accounts (" + list.length + ")";
+    box.appendChild(el("p", "count", list.length + " waiting for approval. " + total + " approved."));
+    if (!list.length) { box.appendChild(el("div", "empty", "No new accounts waiting.")); return; }
+    list.forEach(function (k) {
+      var s = students[k], card = el("div", "item");
+      var top = el("div", "top");
+      top.appendChild(el("h3", "nm", s.name || k));
+      top.appendChild(el("span", "tag out", "New"));
+      card.appendChild(top);
+      card.appendChild(el("p", "meta", "Roll " + (s.id || k) + "  |  Room " + (s.room || "-")));
+      card.appendChild(el("p", "meta", (s.dept || "-") + "  |  " + (s.email || "")));
+      phoneRow(card, s.phone, false);
+      card.appendChild(el("p", "meta", "Created " + fmt(s.createdAt)));
+      var b = el("button", "act", "Approve as hostel student"); b.type = "button";
+      b.addEventListener("click", function () { approve(k, b); });
+      card.appendChild(b);
+      box.appendChild(card);
+    });
   }
 
+  // ---- Out now (latest entry of each student is an exit) ----
+  function outNow() {
+    var seen = {}, out = [];
+    entries.forEach(function (e) { // entries are newest first
+      if (seen[e.uid]) return;
+      seen[e.uid] = true;
+      if (e.type === "out") out.push(e);
+    });
+    return out.sort(function (a, b) { return a.at - b.at; });
+  }
+  function renderOut() {
+    var box = $("paneOut"); box.innerHTML = "";
+    var list = outNow();
+    $("tabOut").textContent = "Out now (" + list.length + ")";
+    box.appendChild(el("p", "count", "Students who left in the last 10 days and have not registered their entry."));
+    if (!list.length) { box.appendChild(el("div", "empty", "Everyone is inside the hostel.")); return; }
+    list.forEach(function (e) {
+      var card = el("div", "item");
+      var top = el("div", "top");
+      top.appendChild(el("h3", "nm", e.name || e.id));
+      top.appendChild(el("span", "tag out", dur(Date.now() - e.at)));
+      card.appendChild(top);
+      card.appendChild(el("p", "meta", "Roll " + (e.id || "-") + "  |  Room " + (e.room || "-") + (e.dept ? "  |  " + e.dept : "")));
+      card.appendChild(el("p", "meta", "Left " + fmt(e.at) + (e.purpose ? "  |  " + e.purpose : "")));
+      phoneRow(card, e.phone, true);
+      box.appendChild(card);
+    });
+  }
+
+  // ---- Records ----
+  function rangeStart() {
+    if (range === "today") { var d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }
+    return Date.now() - (range === "7" ? 7 : 30) * DAY;
+  }
+  function filtered() {
+    var from = rangeStart(), q = $("q").value.trim().toLowerCase();
+    return entries.filter(function (e) {
+      return e.at >= from && (!q || String(e.name || "").toLowerCase().indexOf(q) >= 0 || String(e.id || "").toLowerCase().indexOf(q) >= 0);
+    });
+  }
+  function renderRecords() {
+    var list = filtered(), box = $("recList"); box.innerHTML = "";
+    $("count").textContent = list.length + " record" + (list.length === 1 ? "" : "s") + (list.length > 100 ? ". Showing the latest 100. Download Excel for all." : ".");
+    $("xlBtn").disabled = !list.length;
+    if (!list.length) { box.appendChild(el("div", "empty", "No records in this range.")); return; }
+    list.slice(0, 100).forEach(function (e) {
+      var going = e.type === "out", card = el("div", "item" + (going ? "" : " in"));
+      var top = el("div", "top");
+      top.appendChild(el("h3", "nm", e.name || e.id));
+      top.appendChild(el("span", "tag " + (going ? "out" : "in"), going ? "Exit" : "Entry"));
+      card.appendChild(top);
+      card.appendChild(el("p", "meta", "Roll " + (e.id || "-") + "  |  Room " + (e.room || "-") + (e.dept ? "  |  " + e.dept : "")));
+      card.appendChild(el("p", "meta", fmt(e.at) + (e.purpose ? "  |  " + e.purpose : "")));
+      box.appendChild(card);
+    });
+  }
+  function download() {
+    var list = filtered().slice().sort(function (a, b) { return a.at - b.at; });
+    if (!list.length) return;
+    var rows = list.map(function (e) {
+      var d = new Date(e.at);
+      return {
+        "Date": d.toLocaleDateString("en-GB"),
+        "Time": d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }),
+        "Name": e.name || "", "Roll No": String(e.id || ""), "Department": e.dept || "", "Room": e.room || "",
+        "Mobile": String(e.phone || ""), "Type": e.type === "out" ? "Exit" : "Entry", "Purpose": e.purpose || ""
+      };
+    });
+    var label = range === "today" ? "today" : range === "7" ? "last-7-days" : "last-30-days";
+    var name = "gandhi-hostel-" + label + "-" + new Date().toISOString().slice(0, 10);
+    if (window.XLSX) {
+      var ws = XLSX.utils.json_to_sheet(rows);
+      ws["!cols"] = [{ wch: 12 }, { wch: 8 }, { wch: 26 }, { wch: 12 }, { wch: 22 }, { wch: 8 }, { wch: 13 }, { wch: 8 }, { wch: 12 }];
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Records");
+      XLSX.writeFile(wb, name + ".xlsx");
+    } else { // Excel opens CSV too, if the Excel library could not load
+      var heads = Object.keys(rows[0]);
+      var csv = [heads.join(",")].concat(rows.map(function (r) {
+        return heads.map(function (h) { return '"' + String(r[h]).replace(/"/g, '""') + '"'; }).join(",");
+      })).join("\r\n");
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" }));
+      a.download = name + ".csv";
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+  }
+
+  // ---- Tabs and rendering ----
   function render() {
-    var p = pendingList(), o = outList();
-    $("tabPending").textContent = "Pending (" + p.length + ")";
-    $("tabOut").textContent = "Out now (" + o.length + ")";
-    $("tabPending").classList.toggle("on", tab === "pending");
-    $("tabOut").classList.toggle("on", tab === "out");
-    var list = $("list");
-    list.innerHTML = "";
-
-    if (tab === "pending") {
-      if (!p.length) { list.appendChild(el("div", "empty", "No requests waiting.")); return; }
-      p.forEach(function (k) {
-        var s = data[k], req = s.pending, going = req.type === "out";
-        var card = el("div", "item" + (going ? "" : " in"));
-        var top = el("div", "top");
-        top.appendChild(el("h3", "nm", s.name || k));
-        top.appendChild(el("span", "tag " + (going ? "out" : "in"), going ? "Going out" : "Coming in"));
-        card.appendChild(top);
-        card.appendChild(el("p", "meta", "ID " + (s.id || k) + "  |  Room " + (s.room || "-") + (s.dept ? "  |  " + s.dept : "")));
-        if (req.purpose) card.appendChild(el("p", "meta", "Purpose: " + req.purpose));
-        card.appendChild(el("p", "meta", (going ? "Exit time " : "Entry time ") + fmt(req.time || req.requestedAt) + "  (requested " + fmt(req.requestedAt) + ")"));
-        var acts = el("div", "acts");
-        var yes = el("button", "act ok", "Approve"); yes.type = "button";
-        var no = el("button", "act no", "Decline"); no.type = "button";
-        yes.addEventListener("click", function () { decide(k, true, yes, no); });
-        no.addEventListener("click", function () { decide(k, false, yes, no); });
-        acts.appendChild(yes); acts.appendChild(no);
-        card.appendChild(acts);
-        list.appendChild(card);
-      });
-    } else {
-      if (!o.length) { list.appendChild(el("div", "empty", "Everyone is inside the hostel.")); return; }
-      o.forEach(function (k) {
-        var s = data[k];
-        var card = el("div", "item");
-        var top = el("div", "top");
-        top.appendChild(el("h3", "nm", s.name || k));
-        top.appendChild(el("span", "tag out", "Out"));
-        card.appendChild(top);
-        card.appendChild(el("p", "meta", "ID " + (s.id || k) + "  |  Room " + (s.room || "-") + (s.dept ? "  |  " + s.dept : "")));
-        card.appendChild(el("p", "meta", "Left at " + fmt(s.lastOut)));
-        if (s.lastPurpose) card.appendChild(el("p", "meta", "Purpose: " + s.lastPurpose));
-        list.appendChild(card);
-      });
-    }
-  }
-
-  function decide(key, approve, yes, no) {
-    var s = data[key], req = s.pending;
-    var now = new Date().toISOString(); // decision time is recorded automatically
-    var pending = { type: req.type, requestedAt: req.requestedAt, time: req.time, purpose: req.purpose, status: approve ? "approved" : "rejected", decidedAt: now, decidedBy: session.email || session.uid };
-    var update = { pending: pending };
-    if (approve) {
-      pending.approvedAt = now;
-      update.state = req.type === "out" ? "out" : "in";
-      if (req.type === "out") { update.lastOut = now; update.lastPurpose = req.purpose || ""; } else update.lastIn = now;
-    }
-    yes.disabled = no.disabled = true;
-    db("PATCH", "/students/" + encodeURIComponent(key), update).then(function () {
-      if (!approve) return;
-      return db("POST", "/log", {
-        name: s.name, id: s.id, room: s.room, dept: s.dept || "", hostel: "Gandhi Hostel", type: req.type,
-        requestedAt: req.requestedAt, time: req.time || req.requestedAt, purpose: req.purpose || "", approvedAt: now, approvedBy: session.email || session.uid
-      });
-    }).then(load).catch(function (e) {
-      say("msg", "Could not save. " + explain(e), "bad");
-      yes.disabled = no.disabled = false;
+    ["acc", "out", "rec"].forEach(function (t) {
+      $("pane" + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle("hide", tab !== t);
+      $("tab" + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle("on", tab === t);
     });
+    renderAccounts(); renderOut(); renderRecords();
+  }
+  function tick() {
+    if (!session || document.visibilityState !== "visible") return;
+    if (Date.now() - lastAcc > ACCOUNTS_REFRESH_MS) loadAccounts();
+    if (Date.now() - lastEnt > ENTRIES_REFRESH_MS) loadEntries();
   }
 
   // ---- Wiring ----
   $("siBtn").addEventListener("click", signIn);
   $("fpBtn").addEventListener("click", forgot);
   $("outBtn").addEventListener("click", function () { signOut(); });
+  $("refreshBtn").addEventListener("click", refreshAll);
   $("toForgot").addEventListener("click", function () {
-    $("fpEmail").value = $("siEmail").value;
-    say("fpMsg", "");
+    $("fpEmail").value = $("siEmail").value; say("fpMsg", "");
     $("paneIn").classList.add("hide"); $("paneFp").classList.remove("hide");
   });
-  $("toSignin").addEventListener("click", function () {
-    $("paneFp").classList.add("hide"); $("paneIn").classList.remove("hide");
-  });
-  $("tabPending").addEventListener("click", function () { tab = "pending"; render(); });
+  $("toSignin").addEventListener("click", function () { $("paneFp").classList.add("hide"); $("paneIn").classList.remove("hide"); });
+  $("tabAcc").addEventListener("click", function () { tab = "acc"; render(); });
   $("tabOut").addEventListener("click", function () { tab = "out"; render(); });
+  $("tabRec").addEventListener("click", function () { tab = "rec"; render(); });
+  $("q").addEventListener("input", renderRecords);
+  $("xlBtn").addEventListener("click", download);
+  $("chips").addEventListener("click", function (ev) {
+    var b = ev.target.closest(".chip"); if (!b) return;
+    range = b.getAttribute("data-r");
+    Array.prototype.forEach.call(document.querySelectorAll(".chip"), function (c) { c.classList.toggle("on", c === b); });
+    if (range === "30" && loadedDays < 30) { say("msg", "Loading 30 days..."); loadEntries().then(function () { say("msg", ""); }); }
+    else renderRecords();
+  });
   $("siPass").addEventListener("keydown", function (e) { if (e.key === "Enter") signIn(); });
   $("fpEmail").addEventListener("keydown", function (e) { if (e.key === "Enter") forgot(); });
   ["siEmail", "siPass", "fpEmail"].forEach(function (id) {
     $(id).addEventListener("input", function () { $(id).classList.remove("invalid"); });
   });
-
-  // Show / hide password
-  $("pwBtn").addEventListener("click", function () {
-    var input = $("siPass"), hidden = input.type === "password";
-    input.type = hidden ? "text" : "password";
-    this.textContent = hidden ? "Hide" : "Show";
-    this.setAttribute("aria-label", hidden ? "Hide password" : "Show password");
-    this.setAttribute("aria-pressed", hidden ? "true" : "false");
-  });
+  setInterval(tick, 30000);
+  document.addEventListener("visibilitychange", tick);
 
   // Stay signed in on this phone
   try {
