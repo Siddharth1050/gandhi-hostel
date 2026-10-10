@@ -245,7 +245,7 @@
         body: body === undefined ? undefined : JSON.stringify(body)
       });
     }).then(function (r) {
-      if (!r.ok) throw new Error("DB_ERROR");
+      if (!r.ok) { var err = new Error("DB_ERROR"); err.status = r.status; throw err; }
       return r.json();
     });
   }
@@ -447,7 +447,10 @@
       return authCall("signUp", { email: profile.email, password: $("suPass").value, returnSecureToken: true });
     }).then(function (j) {
         setSession(j.localId, j.idToken, j.refreshToken, j.expiresIn);
-        return db("GET", "/students/" + encodeURIComponent(profile.key));
+        return db("GET", "/students/" + encodeURIComponent(profile.key)).catch(function (e) {
+          if (e.status === 401 || e.status === 403) return { uid: "someone-else" };
+          throw e;
+        });
       }).then(function (existing) {
         if (existing && existing.uid && existing.uid !== session.uid) {
           // Student ID already belongs to another account: undo this sign-up
