@@ -42,7 +42,7 @@
   .bar span{font-size:.86rem;color:var(--muted);word-break:break-all}
   .out{font:inherit;font-size:.86rem;font-weight:600;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer;white-space:nowrap}
   .tabs{display:flex;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:12px;box-shadow:0 8px 22px rgba(13,34,64,.12)}
-  .tab{flex:1;font:inherit;font-weight:600;font-size:.88rem;padding:12px 4px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer}
+  .tab{flex:1;font:inherit;font-weight:600;font-size:.8rem;padding:12px 2px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer}
   .tab.on{background:var(--navy);color:#fff}
   .toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
   .small{font:inherit;font-size:.84rem;font-weight:600;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer;white-space:nowrap}
@@ -114,11 +114,28 @@
       <button class="tab on" id="tabAcc" role="tab" type="button">Accounts (0)</button>
       <button class="tab" id="tabOut" role="tab" type="button">Out now (0)</button>
       <button class="tab" id="tabRec" role="tab" type="button">Records</button>
+      <button class="tab" id="tabSet" role="tab" type="button">Setup</button>
     </div>
     <div class="toolbar"><p class="msg" id="msg" style="margin:0"></p><button class="small" id="refreshBtn" type="button">Refresh</button></div>
 
     <div id="paneAcc"></div>
     <div id="paneOut" class="hide"></div>
+    <div id="paneSet" class="hide">
+      <div class="item">
+        <h3 class="nm">Hostel location</h3>
+        <p class="meta" id="locStatus">Not set yet.</p>
+        <div class="field" style="margin-top:14px"><label for="radius">Allowed distance from the hostel (metres)</label>
+          <input id="radius" type="number" inputmode="numeric" value="150" min="50" max="1000"></div>
+        <p class="meta" style="margin-bottom:12px">Open this page on your phone, stand at the hostel gate, then tap the button. Students can register only when they are within this distance.</p>
+        <p class="msg" id="locMsg"></p>
+        <button class="act" id="setLocBtn" type="button" style="background:var(--navy-2)">Set hostel location here</button>
+      </div>
+      <div class="item">
+        <h3 class="nm">Gate screen</h3>
+        <p class="meta">Keep a phone, tablet or computer at the hostel gate with this page open. It shows a QR code that changes every minute. Students must scan it to register.</p>
+        <a class="call" href="gate.html">Open gate screen</a>
+      </div>
+    </div>
     <div id="paneRec" class="hide">
       <div class="chips" id="chips">
         <button class="chip on" type="button" data-r="today">Today</button>
@@ -342,7 +359,7 @@
     }).catch(handleLoadError);
   }
   function loadEntries() {
-    var days = Math.max(10, range === "30" ? 30 : 10); // 10 days always, so "Out now" is complete
+    var days = range === "30" ? 32 : 10; // 10 days always, so "Out now" is complete
     var q = "orderBy=" + encodeURIComponent('"at"') + "&startAt=" + (Date.now() - days * DAY);
     return db("GET", "/entries", undefined, q).then(function (d) {
       entries = Object.keys(d || {}).map(function (k) { var e = d[k]; e._id = k; return e; })
@@ -353,7 +370,7 @@
   }
   function refreshAll() {
     say("msg", "Loading...");
-    Promise.all([loadAccounts(), loadEntries()]).then(function () {
+    Promise.all([loadAccounts(), loadEntries(), loadConfig()]).then(function () {
       if (session) say("msg", "Updated " + new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }));
     });
   }
@@ -425,50 +442,79 @@
     });
   }
 
-  // ---- Records ----
+  // ---- Records: one row per trip, with the exit and the entry together ----
+  function tripStart(t) { return t.out ? t.out.at : t.inn.at; }
+  function buildTrips(list) {
+    var byUid = {}, trips = [];
+    list.forEach(function (e) { (byUid[e.uid] = byUid[e.uid] || []).push(e); });
+    Object.keys(byUid).forEach(function (u) {
+      var arr = byUid[u].slice().sort(function (a, b) { return a.at - b.at; }), open = null;
+      arr.forEach(function (e) {
+        if (e.type === "out") {
+          if (open) { open.status = "Entry not recorded"; trips.push(open); }
+          open = { who: e, out: e, inn: null, status: "Still out" };
+        } else if (open) {
+          open.inn = e; open.status = "Returned"; trips.push(open); open = null;
+        } else {
+          trips.push({ who: e, out: null, inn: e, status: "Exit not recorded" });
+        }
+      });
+      if (open) trips.push(open);
+    });
+    return trips.sort(function (a, b) { return tripStart(b) - tripStart(a); });
+  }
   function rangeStart() {
     if (range === "today") { var d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }
     return Date.now() - (range === "7" ? 7 : 30) * DAY;
   }
   function filtered() {
     var from = rangeStart(), q = $("q").value.trim().toLowerCase();
-    return entries.filter(function (e) {
-      return e.at >= from && (!q || String(e.name || "").toLowerCase().indexOf(q) >= 0 || String(e.id || "").toLowerCase().indexOf(q) >= 0);
+    return buildTrips(entries).filter(function (t) {
+      var w = t.who;
+      return tripStart(t) >= from && (!q || String(w.name || "").toLowerCase().indexOf(q) >= 0 || String(w.id || "").toLowerCase().indexOf(q) >= 0);
     });
   }
+  function when(e) { return e ? fmt(e.at) : "-"; }
   function renderRecords() {
     var list = filtered(), box = $("recList"); box.innerHTML = "";
-    $("count").textContent = list.length + " record" + (list.length === 1 ? "" : "s") + (list.length > 100 ? ". Showing the latest 100. Download Excel for all." : ".");
+    $("count").textContent = list.length + " trip" + (list.length === 1 ? "" : "s") + (list.length > 100 ? ". Showing the latest 100. Download Excel for all." : ".");
     $("xlBtn").disabled = !list.length;
     if (!list.length) { box.appendChild(el("div", "empty", "No records in this range.")); return; }
-    list.slice(0, 100).forEach(function (e) {
-      var going = e.type === "out", card = el("div", "item" + (going ? "" : " in"));
+    list.slice(0, 100).forEach(function (t) {
+      var w = t.who, ok = t.status === "Returned", card = el("div", "item" + (ok ? " in" : ""));
       var top = el("div", "top");
-      top.appendChild(el("h3", "nm", e.name || e.id));
-      top.appendChild(el("span", "tag " + (going ? "out" : "in"), going ? "Exit" : "Entry"));
+      top.appendChild(el("h3", "nm", w.name || w.id));
+      top.appendChild(el("span", "tag " + (ok ? "in" : "out"), t.status));
       card.appendChild(top);
-      card.appendChild(el("p", "meta", "Roll " + (e.id || "-") + "  |  Room " + (e.room || "-") + (e.dept ? "  |  " + e.dept : "")));
-      card.appendChild(el("p", "meta", fmt(e.at) + (e.purpose ? "  |  " + e.purpose : "")));
+      card.appendChild(el("p", "meta", "Roll " + (w.id || "-") + "  |  Room " + (w.room || "-") + (w.dept ? "  |  " + w.dept : "")));
+      card.appendChild(el("p", "meta", "Out: " + when(t.out) + "   In: " + when(t.inn)));
+      var extra = [];
+      if (t.out && t.out.purpose) extra.push(t.out.purpose);
+      if (t.out && t.inn) extra.push("outside " + dur(t.inn.at - t.out.at));
+      if (extra.length) card.appendChild(el("p", "meta", extra.join("  |  ")));
       box.appendChild(card);
     });
   }
   function download() {
-    var list = filtered().slice().sort(function (a, b) { return a.at - b.at; });
+    var list = filtered().slice().sort(function (a, b) { return tripStart(a) - tripStart(b); });
     if (!list.length) return;
-    var rows = list.map(function (e) {
-      var d = new Date(e.at);
+    function hm(e) { return e ? new Date(e.at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }) : ""; }
+    function dmy(e) { return e ? new Date(e.at).toLocaleDateString("en-GB") : ""; }
+    var rows = list.map(function (t) {
+      var w = t.who;
       return {
-        "Date": d.toLocaleDateString("en-GB"),
-        "Time": d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }),
-        "Name": e.name || "", "Roll No": String(e.id || ""), "Department": e.dept || "", "Room": e.room || "",
-        "Mobile": String(e.phone || ""), "Type": e.type === "out" ? "Exit" : "Entry", "Purpose": e.purpose || ""
+        "Date": new Date(tripStart(t)).toLocaleDateString("en-GB"),
+        "Name": w.name || "", "Roll No": String(w.id || ""), "Department": w.dept || "", "Room": w.room || "",
+        "Mobile": String(w.phone || ""), "Purpose": t.out ? (t.out.purpose || "") : "",
+        "Exit Time": hm(t.out), "Entry Date": dmy(t.inn), "Entry Time": hm(t.inn),
+        "Time Outside": t.out && t.inn ? dur(t.inn.at - t.out.at) : "", "Status": t.status
       };
     });
     var label = range === "today" ? "today" : range === "7" ? "last-7-days" : "last-30-days";
     var name = "gandhi-hostel-" + label + "-" + new Date().toISOString().slice(0, 10);
     if (window.XLSX) {
       var ws = XLSX.utils.json_to_sheet(rows);
-      ws["!cols"] = [{ wch: 12 }, { wch: 8 }, { wch: 26 }, { wch: 12 }, { wch: 22 }, { wch: 8 }, { wch: 13 }, { wch: 8 }, { wch: 12 }];
+      ws["!cols"] = [{ wch: 12 }, { wch: 26 }, { wch: 12 }, { wch: 22 }, { wch: 8 }, { wch: 13 }, { wch: 12 }, { wch: 10 }, { wch: 12 }, { wch: 10 }, { wch: 13 }, { wch: 18 }];
       var wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Records");
       XLSX.writeFile(wb, name + ".xlsx");
@@ -484,9 +530,43 @@
     }
   }
 
+  // ---- Setup: the hostel location that students must be at ----
+  var cfg = null, LOC_LABEL = "Set hostel location here";
+  function loadConfig() {
+    return db("GET", "/config/location").then(function (c) { cfg = c; renderSettings(); }).catch(handleLoadError);
+  }
+  function renderSettings() {
+    $("locStatus").textContent = cfg && typeof cfg.lat === "number"
+      ? "Set. Students can register within " + cfg.radius + " m of " + cfg.lat.toFixed(5) + ", " + cfg.lng.toFixed(5) + " (set " + fmt(cfg.setAt) + ")."
+      : "Not set yet. Students cannot register until you set it.";
+    if (cfg && cfg.radius) $("radius").value = cfg.radius;
+  }
+  function setLocation() {
+    say("locMsg", "");
+    var r = parseInt($("radius").value, 10);
+    if (!(r >= 50 && r <= 1000)) return say("locMsg", "Enter a distance between 50 and 1000 metres.", "bad");
+    if (!navigator.geolocation) return say("locMsg", "This browser cannot get your location.", "bad");
+    var btn = $("setLocBtn"); busy(btn, true);
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var c = pos.coords;
+      if (c.accuracy > 100) { busy(btn, false, LOC_LABEL); return say("locMsg", "GPS signal is weak (about " + Math.round(c.accuracy) + " m). Go outside near the gate and try again.", "bad"); }
+      var dLat = r / 111320, dLng = r / (111320 * Math.cos(c.latitude * Math.PI / 180));
+      var body = { lat: c.latitude, lng: c.longitude, radius: r,
+        minLat: c.latitude - dLat, maxLat: c.latitude + dLat, minLng: c.longitude - dLng, maxLng: c.longitude + dLng,
+        setAt: { ".sv": "timestamp" }, setBy: session.email || session.uid };
+      db("PUT", "/config/location", body).then(loadConfig).then(function () {
+        say("locMsg", "Hostel location saved.", "good");
+      }).catch(function (e) { say("locMsg", "Could not save. " + explain(e), "bad"); })
+        .then(function () { busy(btn, false, LOC_LABEL); });
+    }, function (err) {
+      busy(btn, false, LOC_LABEL);
+      say("locMsg", err && err.code === 1 ? "Location is blocked. Allow location for this site and try again." : "Could not get your location. Turn on GPS and try again.", "bad");
+    }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+  }
+
   // ---- Tabs and rendering ----
   function render() {
-    ["acc", "out", "rec"].forEach(function (t) {
+    ["acc", "out", "rec", "set"].forEach(function (t) {
       $("pane" + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle("hide", tab !== t);
       $("tab" + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle("on", tab === t);
     });
@@ -511,13 +591,15 @@
   $("tabAcc").addEventListener("click", function () { tab = "acc"; render(); });
   $("tabOut").addEventListener("click", function () { tab = "out"; render(); });
   $("tabRec").addEventListener("click", function () { tab = "rec"; render(); });
+  $("tabSet").addEventListener("click", function () { tab = "set"; render(); });
+  $("setLocBtn").addEventListener("click", setLocation);
   $("q").addEventListener("input", renderRecords);
   $("xlBtn").addEventListener("click", download);
   $("chips").addEventListener("click", function (ev) {
     var b = ev.target.closest(".chip"); if (!b) return;
     range = b.getAttribute("data-r");
     Array.prototype.forEach.call(document.querySelectorAll(".chip"), function (c) { c.classList.toggle("on", c === b); });
-    if (range === "30" && loadedDays < 30) { say("msg", "Loading 30 days..."); loadEntries().then(function () { say("msg", ""); }); }
+    if (range === "30" && loadedDays < 32) { say("msg", "Loading 30 days..."); loadEntries().then(function () { say("msg", ""); }); }
     else renderRecords();
   });
   $("siPass").addEventListener("keydown", function (e) { if (e.key === "Enter") signIn(); });

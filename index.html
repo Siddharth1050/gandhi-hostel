@@ -151,7 +151,9 @@
           <div><dt>Department</dt><dd id="rDept"></dd></div>
           <div><dt>Mobile</dt><dd id="rPhone"></dd></div>
         </dl>
-        <div class="notice hide" id="gateWarn">Scan the QR code at the hostel gate to register your exit or entry. It cannot be done from anywhere else.</div>
+        <div class="notice ok hide" id="gateOk">Gate QR scanned. You can register now.</div>
+        <div class="notice hide" id="locWarn">The warden has not set the hostel location yet. Ask the warden.</div>
+        <div class="notice hide" id="gateWarn">Scan the QR code on the screen at the hostel gate. It changes every minute, so a photo of it will not work. You can register only at the hostel.</div>
         <div class="field" id="purposeField">
           <label for="purpose">Where are you going?</label>
           <select id="purpose">
@@ -162,7 +164,7 @@
             <option>Home</option>
           </select>
         </div>
-        <p class="hint" style="margin:0 0 14px">Your time is saved automatically when you submit.</p>
+        <p class="hint" style="margin:0 0 14px">Turn on your phone location. You can register only when you are at the hostel. Your time is saved automatically.</p>
         <p class="msg" id="regMsg"></p>
         <button class="btn" id="regBtn" type="button"></button>
       </div>
@@ -185,12 +187,12 @@
   var API_KEY = "AIzaSyDiNFVaxdes7KXSzmEmiN51GGejtsK8qVI";
   var STORAGE_KEY = "gandhiStudentSession";
   var GATE_KEY = "gandhiGate";
-  var GATE_MINUTES = 15;
+  var GATE_MINUTES = 3; // the code on the gate screen changes every minute, so a scan is only good for a short time
 
   var $ = function (id) { return document.getElementById(id); };
   var base = DB_URL.replace(/\/$/, "");
   var configured = DB_URL.indexOf("YOUR-PROJECT") === -1 && API_KEY.indexOf("YOUR-WEB") === -1;
-  var session = null, profile = null, lastEntry = null, inside = true;
+  var session = null, profile = null, lastEntry = null, loc = null, inside = true;
   var lookupSeq = 0, lookupTimer = null;
 
   if (!configured) $("setupNotice").classList.remove("hide");
@@ -275,6 +277,10 @@
     TOO_MANY_ATTEMPTS_TRY_LATER: "Too many attempts. Wait a few minutes and try again.",
     ROLL_NOT_FOUND: "This roll number is not in the student list. Check it or contact the warden.",
     EMAIL_IN_USE: "This email already has an account, but with a different password. Use Sign in, or Forgot password.",
+    GEO_DENIED: "Location is blocked. Turn on location and allow it for this site in your browser settings, then try again.",
+    GEO_FAILED: "Could not get your location. Turn on GPS and try again.",
+    GEO_UNSUPPORTED: "This browser cannot get your location. Use Chrome or Safari.",
+    GPS_WEAK: "Your GPS signal is weak. Move to an open area near the gate and try again.",
     ID_TAKEN: "This roll number already has an account. Sign in instead, or contact the warden.",
     PROFILE_MISSING: "Your profile could not be found. Contact the warden.",
     SESSION_EXPIRED: "Your session expired. Sign in again.",
@@ -478,9 +484,9 @@
     hideCards(); say("homeMsg", "");
     db("GET", "/approved/" + session.uid).then(function (ok) {
       if (ok !== true) { $("waitCard").classList.remove("hide"); return; }
-      return latestEntry().then(function (e) {
-        lastEntry = e;
-        inside = !e || e.type === "in";
+      return Promise.all([latestEntry(), db("GET", "/config/location")]).then(function (r) {
+        lastEntry = r[0]; loc = r[1];
+        inside = !lastEntry || lastEntry.type === "in";
         renderReg();
       });
     }).catch(function (e) {
@@ -505,35 +511,62 @@
     $("regBtn").textContent = inside ? "Register exit" : "Register entry";
     var scanned = !!gateToken();
     $("gateWarn").classList.toggle("hide", scanned);
-    $("regBtn").disabled = !scanned;
+    $("gateOk").classList.toggle("hide", !scanned);
+    var located = !!(loc && typeof loc.lat === "number");
+    $("locWarn").classList.toggle("hide", located);
+    $("regBtn").disabled = !scanned || !located;
     say("regMsg", "");
+  }
+
+  // ---- Location: you must be at the hostel ----
+  function getPosition() {
+    return new Promise(function (resolve, reject) {
+      if (!navigator.geolocation) return reject(new Error("GEO_UNSUPPORTED"));
+      navigator.geolocation.getCurrentPosition(resolve, function (err) {
+        reject(new Error(err && err.code === 1 ? "GEO_DENIED" : "GEO_FAILED"));
+      }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    });
+  }
+  function distanceM(lat1, lng1, lat2, lng2) {
+    var R = 6371000, rad = Math.PI / 180;
+    var dLat = (lat2 - lat1) * rad, dLng = (lng2 - lng1) * rad;
+    var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return 2 * R * Math.asin(Math.sqrt(h));
   }
 
   function register() {
     say("regMsg", "");
     var gate = gateToken();
-    if (!gate) { renderReg(); return; }
+    if (!gate) {
+      $("gateWarn").classList.remove("hide"); $("gateOk").classList.add("hide"); $("regBtn").disabled = true;
+      return say("regMsg", "The QR has expired. Scan the QR on the gate screen again.", "bad");
+    }
     var purpose = $("purpose").value;
     if (inside && !purpose) { $("purpose").classList.add("invalid"); return say("regMsg", "Choose where you are going.", "bad"); }
 
-    var entry = {
-      uid: session.uid, id: profile.id, name: profile.name, room: profile.room || "", dept: profile.dept || "", phone: profile.phone || "",
-      type: inside ? "out" : "in", purpose: inside ? purpose : "",
-      gate: gate,
-      at: { ".sv": "timestamp" } // the time comes from the server clock, so it cannot be changed
-    };
     var btn = $("regBtn"); busy(btn, true);
-    db("POST", "/entries", entry).then(function () {
+    getPosition().then(function (pos) {
+      var c = pos.coords;
+      if (c.accuracy > 100) throw new Error("GPS_WEAK");
+      var d = Math.round(distanceM(c.latitude, c.longitude, loc.lat, loc.lng));
+      if (d > loc.radius) { var far = new Error("TOO_FAR"); far.dist = d; throw far; }
+      var entry = {
+        uid: session.uid, id: profile.id, name: profile.name, room: profile.room || "", dept: profile.dept || "", phone: profile.phone || "",
+        type: inside ? "out" : "in", purpose: inside ? purpose : "",
+        gate: gate,
+        lat: Math.round(c.latitude * 1e6) / 1e6, lng: Math.round(c.longitude * 1e6) / 1e6, acc: Math.round(c.accuracy),
+        at: { ".sv": "timestamp" } // the time comes from the server clock, so it cannot be changed
+      };
+      return db("POST", "/entries", entry).then(function () { return entry; });
+    }).then(function (entry) {
       try { sessionStorage.removeItem(GATE_KEY); } catch (e) {} // the next exit or entry needs a fresh scan
-      return latestEntry();
-    }).then(function (e) {
-      showDone(e || { type: entry.type, purpose: entry.purpose, at: Date.now() });
-    }).catch(function (e) {
+      return latestEntry().then(function (e) { return e || { type: entry.type, purpose: entry.purpose, at: Date.now() }; });
+    }).then(showDone).catch(function (e) {
       busy(btn, false, inside ? "Register exit" : "Register entry");
-      if (e.status === 401 || e.status === 403) {
-        say("regMsg", "Could not save. Scan the gate QR again. If it keeps failing, ask the warden to check your account.", "bad");
-        try { sessionStorage.removeItem(GATE_KEY); } catch (x) {}
-        $("regBtn").disabled = true; $("gateWarn").classList.remove("hide");
+      if (e.message === "TOO_FAR") {
+        say("regMsg", "You are about " + e.dist + " m from the hostel. Go to the hostel gate, scan the QR again and register.", "bad");
+      } else if (e.status === 401 || e.status === 403) {
+        say("regMsg", "Could not save (error " + e.status + "). The QR may have changed: scan the QR on the gate screen again. Your account must be approved and you must be at the hostel.", "bad");
       } else if (String(e.message).indexOf("SESSION_EXPIRED") === 0) signOut(explain(e));
       else say("regMsg", explain(e), "bad");
     });
