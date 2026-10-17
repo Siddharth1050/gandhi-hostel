@@ -154,9 +154,9 @@
           <div><dt>Department</dt><dd id="rDept"></dd></div>
           <div><dt>Mobile</dt><dd id="rPhone"></dd></div>
         </dl>
-        <div class="notice ok hide" id="gateOk">QR scanned and your location is at the hostel. You can register now.</div>
+        <div class="notice ok hide" id="gateOk">You are at the hostel. You can register now.</div>
         <div class="notice hide" id="locWarn">The warden has not set the hostel location yet. Ask the warden.</div>
-        <div class="notice hide" id="gateWarn">Scan the QR code at the hostel gate to register your exit or entry. You can register only when you are at the hostel.</div>
+        <div class="notice hide" id="gateWarn">Turn on your phone location and stand inside the hostel. You can register only when you are at the hostel.</div>
         <div class="field" id="purposeField">
           <label for="purpose">Where are you going?</label>
           <select id="purpose">
@@ -189,30 +189,17 @@
   var DB_URL = "https://gandhi-hostel-default-rtdb.asia-southeast1.firebasedatabase.app";
   var API_KEY = "AIzaSyDiNFVaxdes7KXSzmEmiN51GGejtsK8qVI";
   var STORAGE_KEY = "gandhiStudentSession";
-  var GATE_KEY = "gandhiGate";
-  var GATE_MINUTES = 15; // one scan of the gate QR is good for this long
 
   var $ = function (id) { return document.getElementById(id); };
   var base = DB_URL.replace(/\/$/, "");
   var configured = DB_URL.indexOf("YOUR-PROJECT") === -1 && API_KEY.indexOf("YOUR-WEB") === -1;
-  var session = null, profile = null, lastEntry = null, loc = null, inside = true, pendingGate = null;
+  var session = null, profile = null, lastEntry = null, loc = null, inside = true, hostelOk = false, checking = false;
   var lookupSeq = 0, lookupTimer = null;
 
   if (!configured) $("setupNotice").classList.remove("hide");
 
-  // ---- Gate QR: the link in the QR carries a secret code ----
-  var scanCode = null;
-  try {
-    scanCode = new URLSearchParams(location.search).get("g");
-    if (scanCode) history.replaceState(null, "", location.pathname); // keep the code out of the address bar
-  } catch (e) {}
-  function gateToken() {
-    try {
-      var v = JSON.parse(sessionStorage.getItem(GATE_KEY) || "null");
-      if (v && v.g && Date.now() - v.ts < GATE_MINUTES * 60000) return v.g;
-    } catch (e) {}
-    return null;
-  }
+  // The QR is just the link to this page. Old QR links may end in ?g=..., which is ignored.
+  try { if (location.search) history.replaceState(null, "", location.pathname); } catch (e) {}
 
   // ---- Firebase Auth + Database (REST) ----
   function authCall(endpoint, body) {
@@ -510,12 +497,11 @@
     $("purposeField").classList.toggle("hide", !inside);
     $("purpose").value = ""; $("purpose").classList.remove("invalid");
     $("regBtn").textContent = inside ? "Register exit" : "Register entry";
-    var scanned = !!gateToken();
-    $("gateWarn").classList.toggle("hide", scanned || !!pendingGate);
-    $("gateOk").classList.toggle("hide", !scanned);
+    $("gateWarn").classList.toggle("hide", hostelOk || checking);
+    $("gateOk").classList.toggle("hide", !hostelOk);
     var located = !!(loc && typeof loc.lat === "number");
     $("locWarn").classList.toggle("hide", located);
-    $("regBtn").disabled = !scanned || !located;
+    $("regBtn").disabled = !located;
     say("regMsg", "");
   }
 
@@ -535,16 +521,18 @@
     return 2 * R * Math.asin(Math.sqrt(h));
   }
 
-  // ---- Scanning the QR: it works only when you are at the hostel ----
+  // ---- Location: registration works only when you are at the hostel ----
   function scanNote(kind, text) {
     var n = $("scanNote");
     n.className = "notice" + (kind === "ok" ? " ok" : kind === "bad" ? " bad" : "");
     n.textContent = text;
-    $("scanRetry").classList.toggle("hide", !(kind === "bad" && pendingGate));
+    $("scanRetry").classList.toggle("hide", kind !== "bad");
   }
-  function verifyScan(code) {
-    pendingGate = code;
-    scanNote("wait", "QR scanned. Checking that you are at the hostel...");
+  function rerender() { if (session && profile && !$("regCard").classList.contains("hide")) renderReg(); }
+  function checkHere() {
+    if (!configured) return;
+    checking = true; hostelOk = false;
+    scanNote("wait", "Checking that you are at the hostel...");
     var cfg = fetch(base + "/config/location.json").then(function (r) {
       if (!r.ok) throw new Error("DB_ERROR");
       return r.json();
@@ -558,26 +546,21 @@
         if (d > c.radius) { var far = new Error("TOO_FAR"); far.dist = d; throw far; }
       });
     }).then(function () {
-      try { sessionStorage.setItem(GATE_KEY, JSON.stringify({ g: code, ts: Date.now() })); } catch (e) {}
-      pendingGate = null;
-      scanNote("ok", "QR scanned. You are at the hostel." + (session ? "" : " Sign in to register."));
-      if (session && profile && !$("regCard").classList.contains("hide")) renderReg();
+      checking = false; hostelOk = true;
+      scanNote("ok", "You are at the hostel." + (session ? "" : " Sign in to register."));
+      rerender();
     }).catch(function (e) {
+      checking = false; hostelOk = false;
       scanNote("bad", e.message === "TOO_FAR"
-        ? "You are about " + e.dist + " m from the hostel. This QR works only at the hostel."
+        ? "You are about " + e.dist + " m from the hostel. You can register only at the hostel."
         : explain(e));
-      if (session && profile && !$("regCard").classList.contains("hide")) renderReg();
+      rerender();
     });
   }
-  $("scanRetry").addEventListener("click", function () { if (pendingGate) verifyScan(pendingGate); });
+  $("scanRetry").addEventListener("click", checkHere);
 
   function register() {
     say("regMsg", "");
-    var gate = gateToken();
-    if (!gate) {
-      $("gateWarn").classList.remove("hide"); $("gateOk").classList.add("hide"); $("regBtn").disabled = true;
-      return say("regMsg", "The scan has expired. Scan the QR at the hostel gate again.", "bad");
-    }
     var purpose = $("purpose").value;
     if (inside && !purpose) { $("purpose").classList.add("invalid"); return say("regMsg", "Choose where you are going.", "bad"); }
 
@@ -590,20 +573,18 @@
       var entry = {
         uid: session.uid, id: profile.id, name: profile.name, room: profile.room || "", dept: profile.dept || "", phone: profile.phone || "",
         type: inside ? "out" : "in", purpose: inside ? purpose : "",
-        gate: gate,
         lat: Math.round(c.latitude * 1e6) / 1e6, lng: Math.round(c.longitude * 1e6) / 1e6, acc: Math.round(c.accuracy),
         at: { ".sv": "timestamp" } // the time comes from the server clock, so it cannot be changed
       };
       return db("POST", "/entries", entry).then(function () { return entry; });
     }).then(function (entry) {
-      try { sessionStorage.removeItem(GATE_KEY); } catch (e) {} // the next exit or entry needs a fresh scan
       return latestEntry().then(function (e) { return e || { type: entry.type, purpose: entry.purpose, at: Date.now() }; });
     }).then(showDone).catch(function (e) {
       busy(btn, false, inside ? "Register exit" : "Register entry");
       if (e.message === "TOO_FAR") {
-        say("regMsg", "You are about " + e.dist + " m from the hostel. Go to the hostel gate, scan the QR again and register.", "bad");
+        say("regMsg", "You are about " + e.dist + " m from the hostel. Go to the hostel and try again.", "bad");
       } else if (e.status === 401 || e.status === 403) {
-        say("regMsg", "Could not save (error " + e.status + "). Scan the QR at the hostel gate again (if the QR was replaced, scan the new one). Your account must be approved and you must be at the hostel.", "bad");
+        say("regMsg", "Could not save (error " + e.status + "). Your account must be approved and you must be at the hostel. If it keeps failing, tell the warden.", "bad");
       } else if (String(e.message).indexOf("SESSION_EXPIRED") === 0) signOut(explain(e));
       else say("regMsg", explain(e), "bad");
     });
@@ -634,9 +615,8 @@
     $(id).addEventListener("input", function () { $(id).classList.remove("invalid"); });
   });
 
-  // ---- A QR was just scanned? Check the location now ----
-  if (scanCode) { if (configured) verifyScan(scanCode); }
-  else if (gateToken()) scanNote("ok", "QR scanned. You are at the hostel." + " Sign in to register.");
+  // ---- Opening the page (by the QR) checks the location at once ----
+  checkHere();
 
   // ---- Stay signed in on this phone ----
   try {

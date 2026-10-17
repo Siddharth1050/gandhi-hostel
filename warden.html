@@ -65,6 +65,19 @@
   .search{margin-bottom:12px}
   .count{font-size:.88rem;color:var(--muted);margin:0 0 12px}
   .xl{background:var(--ok);margin-bottom:14px;box-shadow:none}
+  .qrwrap{text-align:center;margin:12px 0}
+  #gateQr{display:inline-block;padding:14px;background:#fff;border:2px solid var(--navy);border-radius:14px}
+  #gateQr canvas,#gateQr img{display:block;max-width:100%;height:auto}
+  .printonly{display:none}
+  @media print{
+    .masthead,.bar,.tabs,.toolbar,#authView,#paneAcc,#paneOut,#paneRec,.noprint{display:none!important}
+    body{background:#fff}
+    .sheet{margin:0;padding:0;max-width:none}
+    #printArea{border:0;box-shadow:none;text-align:center;padding-top:40px}
+    #printArea .nm{font-size:2.2rem}
+    #printArea .meta{font-size:1.1rem;color:#000}
+    .printonly{display:block}
+  }
 </style>
 </head>
 <body>
@@ -121,7 +134,7 @@
     <div id="paneAcc"></div>
     <div id="paneOut" class="hide"></div>
     <div id="paneSet" class="hide">
-      <div class="item">
+      <div class="item noprint">
         <h3 class="nm">Hostel location</h3>
         <p class="meta" id="locStatus">Not set yet.</p>
         <div class="field" style="margin-top:14px"><label for="radius">Allowed distance from the hostel (metres)</label>
@@ -130,10 +143,16 @@
         <p class="msg" id="locMsg"></p>
         <button class="act" id="setLocBtn" type="button" style="background:var(--navy-2)">Set hostel location here</button>
       </div>
-      <div class="item">
-        <h3 class="nm">Gate screen</h3>
-        <p class="meta">Keep a phone, tablet or computer at the hostel gate with this page open. It shows a QR code that changes every minute. Students must scan it to register.</p>
-        <a class="call" href="gate.html">Open gate screen</a>
+      <div class="item" id="printArea">
+        <h3 class="nm">Gandhi Hostel gate QR</h3>
+        <p class="meta">Print this once and stick it at the hostel gate. Students scan it to register.</p>
+        <div class="qrwrap"><div id="gateQr"></div></div>
+        <p class="meta"><a class="tel" id="gateLink" href="#"></a></p>
+        <p class="meta printonly">Scan to register your exit or entry. Turn on your phone location.</p>
+      </div>
+      <div class="item noprint">
+        <p class="meta" style="margin-bottom:12px">This QR never changes. A student can register only when the phone location is at the hostel, so set the hostel location above first.</p>
+        <button class="act" id="printBtn" type="button" style="background:var(--navy-2)">Print or save as PDF</button>
       </div>
     </div>
     <div id="paneRec" class="hide">
@@ -152,6 +171,7 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 (function () {
   // ---- Settings: same two values as the student page ----
@@ -294,6 +314,7 @@
     $("authView").classList.add("hide");
     $("deskView").classList.remove("hide");
     window.scrollTo(0, 0);
+    renderGate();
     refreshAll();
   }
   function signOut(note) {
@@ -531,6 +552,15 @@
   }
 
   // ---- Setup: the hostel location that students must be at ----
+  // ---- Setup: the gate QR is just the link to the student page ----
+  var STUDENT_URL = "https://siddharth1050.github.io/gandhi-hostel/";
+  function renderGate() {
+    var box = $("gateQr"); box.innerHTML = "";
+    var link = $("gateLink"); link.href = STUDENT_URL; link.textContent = STUDENT_URL;
+    if (typeof QRCode === "undefined") { link.textContent = "The QR library did not load. Check your internet and refresh."; return; }
+    new QRCode(box, { text: STUDENT_URL, width: 260, height: 260, colorDark: "#0d2240", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+  }
+
   var cfg = null, LOC_LABEL = "Set hostel location here";
   function loadConfig() {
     return db("GET", "/config/location").then(function (c) { cfg = c; renderSettings(); }).catch(handleLoadError);
@@ -593,6 +623,7 @@
   $("tabRec").addEventListener("click", function () { tab = "rec"; render(); });
   $("tabSet").addEventListener("click", function () { tab = "set"; render(); });
   $("setLocBtn").addEventListener("click", setLocation);
+  $("printBtn").addEventListener("click", function () { window.print(); });
   $("q").addEventListener("input", renderRecords);
   $("xlBtn").addEventListener("click", download);
   $("chips").addEventListener("click", function (ev) {
